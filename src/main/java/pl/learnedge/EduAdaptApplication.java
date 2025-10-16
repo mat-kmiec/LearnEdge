@@ -1,4 +1,4 @@
-package pl.eduadapt;
+package pl.learnedge;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
