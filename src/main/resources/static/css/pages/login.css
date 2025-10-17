@@ -1,0 +1,81 @@
+:root {
+    --color-primary: #00b8e6;
+    --color-secondary: #07a1f1;
+    --color-accent: #04d1b7;
+}
+
+body {
+    min-height: 100vh;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(
+            270deg,
+            var(--color-primary),
+            var(--color-secondary),
+            var(--color-accent),
+            var(--color-accent)
+    );
+    background-size: 400% 400%;
+    animation: gradientShift 12s ease infinite;
+    font-family: "Inter", sans-serif;
+}
+
+@keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+main {
+    width: 100%;
+    max-width: 400px;
+}
+
+.card {
+    border-radius: 1rem;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+.btn-google {
+    background-color: #db4437;
+    color: #fff;
+}
+
+.btn-google:hover {
+    background-color: #c33d30;
+    color: #fff;
+}
+
+.brand-gradient {
+    background: linear-gradient(90deg, #00b8e6, #04d1b7);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-size: 1.75rem;
+    font-weight: 700;
+}
+
+.btn-gradient {
+    background: linear-gradient(90deg, #00b8e6, #04d1b7);
+    color: #fff !important;
+    text-transform: uppercase;
+    font-weight: 600;
+    border: none;
+    border-radius: 25px;
+    padding: 0.45rem 1.2rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 10px rgba(0, 184, 230, 0.35);
+}
+
+.google-icon {
+    font-size: 2rem;
+    background: linear-gradient(90deg, #4285F4, #EA4335, #FBBC05, #34A853);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+button:hover{
+    transform: scale(1.05);
+}
+

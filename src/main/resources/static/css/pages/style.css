@@ -56,17 +56,14 @@ main {
   color: white;
 }
 
-/* ===== Navbar ===== */
 .navbar {
   transition: background 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* Brand */
 .navbar-brand {
   letter-spacing: 0.75px;
 }
 
-/* Linki */
 .navbar .nav-link {
   color: #333;
   font-weight: bold;
@@ -94,7 +91,6 @@ main {
   width: 100%;
 }
 
-/* Przycisk logowania */
 .btn-outline-primary {
   border-color: var(--color-primary);
   color: var(--color-primary);
@@ -110,7 +106,6 @@ main {
   box-shadow: 0 0 8px var(--color-secondary);
 }
 
-/* Hamburger ikonka */
 .navbar-toggler {
   border-color: rgba(0, 0, 0, 0.1);
 }
@@ -127,7 +122,6 @@ main {
   font-weight: 700;
 }
 
-/* Gradientowy przycisk logowania */
 .btn-gradient {
   background: linear-gradient(90deg, #00b8e6, #04d1b7);
   color: #fff !important;
@@ -151,7 +145,6 @@ main {
   box-shadow: 0 0 8px rgba(0, 184, 230, 0.35);
 }
 
-/* Sekcja HERO */
 .section.one {
   height: 100vh;
   scroll-snap-align: start;
@@ -183,7 +176,6 @@ main {
   }
 }
 
-/* Tekst i nagłówek */
 .section.one h1 {
   line-height: 1.2;
 }
@@ -192,7 +184,6 @@ main {
   max-width: 500px;
 }
 
-/* Przycisk */
 .btn-gradient {
   background: linear-gradient(90deg, #00b8e6, #04d1b7);
   color: #fff !important;
@@ -208,7 +199,6 @@ main {
   box-shadow: 0 4px 15px rgba(0, 184, 230, 0.45);
 }
 
-/* Obrazek */
 .hero-img {
   max-width: 80%;
   filter: drop-shadow(0 0 25px rgba(0, 0, 0, 0.2));
@@ -405,7 +395,6 @@ main {
   line-height: 1.3;
 }
 
-/* === RESPONSYWNOŚĆ MOBILNA === */
 @media (max-width: 991px) {
     
   main {
@@ -420,12 +409,12 @@ main {
     padding: 4rem 0;
   }
 
-  /* Dodatkowy margines pod navbar */
+
   body {
     padding-top: 70px;
   }
 
-  /* Drobne dopasowania layoutu */
+
   .section.one .container,
   .section.two .container,
   .section.three .container,
@@ -435,12 +424,10 @@ main {
     padding-right: 1rem;
   }
 
-  /* Mniejsze odstępy w kartach i sekcjach */
   .learn-card,
   .process-step {
     margin-bottom: 1.5rem;
   }
-  /* NAVBAR */
   .navbar-collapse {
     background: #fff;
     border-radius: 12px;
@@ -461,7 +448,6 @@ main {
 }
 
 @media (max-width: 768px) {
-  /* HERO – zamiana kolejności, mniejsze marginesy */
   .section.one .row {
     flex-direction: column-reverse;
     text-align: center;
@@ -482,7 +468,6 @@ main {
     margin: 1.5rem auto 0;
   }
 
-  /* KARTY */
   .learn-card {
     margin: 0 1rem;
   }
@@ -491,7 +476,6 @@ main {
     font-size: 0.95rem;
   }
 
-  /* SEKCJA 3 – kroki */
   .process-step {
     margin: 0 1rem;
     padding: 1.5rem;
@@ -501,7 +485,6 @@ main {
     font-size: 2.2rem;
   }
 
-  /* SEKCJA 4 – ilustracja + tekst */
   .section.four .row {
     flex-direction: column;
     text-align: center;
@@ -516,7 +499,6 @@ main {
     font-size: 2rem;
   }
 
-  /* SEKCJA 5 – końcowa */
   .section.five h2 {
     font-size: 2rem;
   }
@@ -526,7 +508,6 @@ main {
     margin-bottom: 2rem;
   }
 
-  /* OGÓLNE */
   .display-5 {
     font-size: 2rem;
   }
@@ -537,7 +518,6 @@ main {
 }
 
 @media (max-width: 480px) {
-  /* HERO – jeszcze bardziej kompaktowy układ */
   .section.one h1 {
     font-size: 1.6rem;
   }
@@ -552,7 +532,6 @@ main {
     font-size: 0.9rem;
   }
 
-  /* Karty */
   .learn-card {
     padding: 1.25rem;
   }
@@ -561,7 +540,6 @@ main {
     font-size: 1.1rem;
   }
 
-  /* Ograniczenie maksymalnej wysokości sekcji */
   .section {
     min-height: auto;
     padding: 3rem 0;
