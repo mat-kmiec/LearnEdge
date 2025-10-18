@@ -96,3 +96,11 @@ button:hover{
     box-shadow: none !important;
 }
 
+.pw-fill.lv-0 { background-color: transparent; }
+.pw-fill.lv-1 { background-color: #dc3545; }   /* czerwony – słabe */
+.pw-fill.lv-2 { background-color: #fd7e14; }   /* pomarańczowy – średnie */
+.pw-fill.lv-3 { background-color: #ffc107; }   /* żółty – dobre */
+.pw-fill.lv-4 { background-color: #28a745; }   /* zielony – mocne */
+.show-hint { display: block !important; }
+.invalid-hint { display: none; }
+

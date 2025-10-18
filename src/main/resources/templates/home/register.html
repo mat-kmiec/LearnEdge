@@ -20,8 +20,15 @@
 <main class="m-lg-3">
     <section class="card p-4 shadow">
         <header class="text-center mb-4">
-            <img th:src="@{/img/logo-icon.png}" src="../../static/img/logo-icon.png" alt="Logo aplikacji" width="64" height="64" class="mb-3">
-            <h1 class="h4 fw-bold brand-gradient">LearnEdge</h1>
+            <a th:href="@{/}" href="/" class="text-decoration-none text-reset d-inline-block">
+                <img th:src="@{/img/logo-icon.png}"
+                     src="../../static/img/logo-icon.png"
+                     alt="Logo aplikacji"
+                     width="64"
+                     height="64"
+                     class="mb-3">
+                <h1 class="h4 fw-bold brand-gradient m-0">LearnEdge</h1>
+            </a>
         </header>
 
         <p class="text-muted mb-3 text-center">
@@ -75,7 +82,7 @@
 
         <footer class="text-center mt-4">
             <p class="small mb-0">Masz już konto?
-                <a th:href="@{/login}" class="text-decoration-none fw-semibold">Zaloguj się</a>
+                <a th:href="@{/logowanie}" class="text-decoration-none fw-semibold">Zaloguj się</a>
             </p>
         </footer>
     </section>
