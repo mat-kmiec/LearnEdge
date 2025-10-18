@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="pl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LearnEdge – Mój profil</title>
+
+    <!-- Bootstrap -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+      rel="stylesheet"
+    />
+
+    <!-- Custom -->
+    <link
+      th:href="@{/css/pages/dashboard.css}"
+      href="../../static/css/pages/dashboard.css"
+      rel="stylesheet"
+    />
+
+    <style>
+      /* SPECJALNE DODATKI DLA PROFILU */
+      .profile-card {
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 18px;
+        padding: 2rem;
+        color: #fff;
+        backdrop-filter: blur(10px);
+        transition: all 0.35s ease;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.25);
+      }
+
+      .profile-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 10px 30px rgba(0, 184, 230, 0.35);
+      }
+
+      .profile-card h5 {
+        font-weight: 600;
+        background: linear-gradient(90deg, #00b8e6, #04d1b7);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      .form-control {
+        background: rgba(255, 255, 255, 0.12) !important;
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        color: #fff !important;
+        border-radius: 12px;
+        transition: all 0.3s ease;
+      }
+
+      .form-control:focus {
+        border-color: var(--color-accent);
+        box-shadow: 0 0 10px rgba(4, 209, 183, 0.4);
+        background: rgba(255, 255, 255, 0.18);
+      }
+
+      label {
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: rgba(255, 255, 255, 0.85);
+      }
+
+      .profile-avatar {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        border: 3px solid var(--color-accent);
+        object-fit: cover;
+        box-shadow: 0 0 20px rgba(0, 184, 230, 0.4);
+        transition: all 0.3s ease;
+      }
+
+      .profile-avatar:hover {
+        transform: scale(1.05);
+      }
+
+      .profile-section-title {
+        font-size: 1.2rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        color: #fff;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .profile-section-title i {
+        color: var(--color-accent);
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg fixed-top bg-white shadow">
+      <div class="container">
+        <a class="navbar-brand d-flex align-items-center" href="#">
+          <img
+            th:src="@{/img/logo-icon.png}"
+            src="../../static/img/logo-icon.png"
+            alt="Logo"
+            width="40"
+            height="40"
+            class="me-2"
+          />
+          <span class="brand-gradient">LearnEdge</span>
+        </a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div
+          class="collapse navbar-collapse text-center justify-content-end"
+          id="navbarNav"
+        >
+          <ul class="navbar-nav align-items-lg-center gap-lg-3">
+            <li class="nav-item">
+              <a class="nav-link" href="dashboard.html">moje kursy</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" href="profile.html" th:href="@{/profil}">mój profil</a>
+            </li>
+            <li class="nav-item d-lg-none mt-2">
+              <a th:href="@{/logout}" href="#" class="btn btn-gradient w-100">
+                wyloguj
+              </a>
+            </li>
+          </ul>
+        </div>
+        <a
+          th:href="@{/logout}"
+          href="#login"
+          class="btn btn-gradient ms-lg-3 d-none d-lg-inline-block"
+          >wyloguj</a
+        >
+      </div>
+    </nav>
+
+    <!-- Zawartość -->
+    <div class="container py-5">
+      <div class="dashboard-container">
+        <div class="dashboard-header text-center mb-5">
+          <h1 class="mb-2">Mój profil</h1>
+          <p class="text-light opacity-75 small mb-0">
+            Zarządzaj swoim kontem, aktualizuj dane i dbaj o bezpieczeństwo swojego profilu.
+          </p>
+        </div>
+
+        <div class="row g-4">
+          <!-- Avatar + dane -->
+          <div class="col-lg-4 text-center">
+            <div class="profile-card h-100 d-flex flex-column align-items-center justify-content-center">
+              <img
+                src="https://cdn-icons-png.flaticon.com/512/149/149071.png"
+                alt="Avatar"
+                class="profile-avatar mb-3"
+              />
+              <h4 class="fw-bold">Jan Kowalski</h4>
+              <p class="text-light small mb-3">jan.kowalski@example.com</p>
+              <button class="btn btn-gradient btn-sm w-100 mt-2">
+                <i class="bi bi-camera me-2"></i> Zmień zdjęcie
+              </button>
+            </div>
+          </div>
+
+          <!-- Dane osobiste -->
+          <div class="col-lg-8">
+            <div class="profile-card h-100">
+              <div class="profile-section-title">
+                <i class="bi bi-person-circle"></i> Dane użytkownika
+              </div>
+              <form>
+                <div class="row">
+                  <div class="col-md-6 mb-3">
+                    <label for="firstName">Imię</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="firstName"
+                      value="Jan"
+                    />
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <label for="lastName">Nazwisko</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="lastName"
+                      value="Kowalski"
+                    />
+                  </div>
+                  <div class="col-md-12 mb-3">
+                    <label for="email">Adres e-mail</label>
+                    <input
+                      type="email"
+                      class="form-control"
+                      id="email"
+                      value="jan.kowalski@example.com"
+                    />
+                  </div>
+                </div>
+                <button type="submit" class="btn btn-gradient w-100 mt-3">
+                  <i class="bi bi-save me-2"></i> Zaktualizuj dane
+                </button>
+              </form>
+            </div>
+          </div>
+          <!-- Styl uczenia się -->
+<div class="col-lg-12">
+  <div class="profile-card mt-3">
+    <div class="profile-section-title">
+      <i class="bi bi-lightbulb"></i> Styl uczenia się
+    </div>
+    <p class="text-light small mb-4">
+      Wybierz swój styl uczenia się ręcznie lub pozwól naszemu botowi AI
+      pomóc Ci go określić na podstawie krótkiej ankiety.
+    </p>
+
+    <div class="d-flex flex-column flex-md-row align-items-md-center gap-3">
+      <!-- Select -->
+      <div class="flex-fill">
+  <label for="learningStyle" class="form-label mb-1 text-light small"
+    >Wybierz styl ręcznie</label
+  >
+  <select id="learningStyle" class="custom-select-learnedge w-100">
+    <option selected disabled>-- wybierz styl --</option>
+    <option value="VISUAL">👁️ Wzrokowiec</option>
+    <option value="AUDITORY">🎧 Słuchowiec</option>
+    <option value="KINESTHETIC">✋ Kinestetyk</option>
+  </select>
+</div>
+
+      <!-- Przyciski -->
+      <div class="d-flex flex-column flex-fill flex-md-row gap-2 mt-2 mt-md-4">
+        <button class="btn btn-gradient flex-fill">
+          <i class="bi bi-save me-2"></i> Zapisz styl
+        </button>
+        <a
+          th:href="@{/ankieta-ai}"
+          href="ankieta-ai.html"
+          class="btn btn-outline-primary flex-fill"
+        >
+          <i class="bi bi-robot me-2"></i> Wypełnij ankietę AI
+        </a>
+      </div>
+    </div>
+
+    <!-- Aktualny styl użytkownika -->
+    <div class="mt-4 d-flex align-items-center gap-3">
+      <i class="bi bi-person-check text-accent fs-4"></i>
+      <p class="mb-0 text-light small">
+        Twój aktualny styl uczenia: <strong class="text-accent">Wzrokowiec</strong>
+      </p>
+    </div>
+  </div>
+</div>
+
+
+          <!-- Zmiana hasła -->
+          <div class="col-lg-12">
+            <div class="profile-card mt-3">
+              <div class="profile-section-title">
+                <i class="bi bi-shield-lock"></i> Zmiana hasła
+              </div>
+              <form class="row">
+                <div class="col-md-4 mb-3">
+                  <label for="currentPassword">Obecne hasło</label>
+                  <input
+                    type="password"
+                    class="form-control"
+                    id="currentPassword"
+                    placeholder="••••••••"
+                  />
+                </div>
+                <div class="col-md-4 mb-3">
+                  <label for="newPassword">Nowe hasło</label>
+                  <input
+                    type="password"
+                    class="form-control"
+                    id="newPassword"
+                    placeholder="Nowe hasło"
+                  />
+                </div>
+                <div class="col-md-4 mb-3">
+                  <label for="confirmPassword">Powtórz hasło</label>
+                  <input
+                    type="password"
+                    class="form-control"
+                    id="confirmPassword"
+                    placeholder="Powtórz nowe hasło"
+                  />
+                </div>
+                <div class="col-12">
+                  <button type="submit" class="btn btn-gradient w-100 mt-2">
+                    <i class="bi bi-arrow-repeat me-2"></i> Zmień hasło
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <div class="text-center mt-5 opacity-75">
+          <p class="small mb-0">
+            Pamiętaj, aby chronić swoje dane i nie udostępniać nikomu swojego
+            hasła.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

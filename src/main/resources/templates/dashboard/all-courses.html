@@ -3,7 +3,13 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>LearnEdge - Dostępne kursy</title>
+    <title>LearnEdge - Wszystkie kursy</title>
+        <link
+      rel="icon"
+      type="image/x-icon"
+      th:href="@{/img/favicon.ico}"
+      href="../../static/img/favicon.ico"
+    />
 
     <!-- Bootstrap -->
     <link
@@ -53,7 +59,7 @@
               <a class="nav-link" href="dashboard.html">moje kursy</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#section2">moje konto</a>
+              <a class="nav-link" href="profile.html" th:href="@{/profil}">moje konto</a>
             </li>
             <li class="nav-item d-lg-none mt-2">
               <a th:href="@{/logout}" href="#" class="btn btn-gradient w-100">
