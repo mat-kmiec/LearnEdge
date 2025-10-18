@@ -79,3 +79,20 @@ button:hover{
     transform: scale(1.05);
 }
 
+/* Domyślnie ukrywaj podpowiedzi błędów */
+.invalid-hint {
+    display: none;
+}
+
+/* Pokazuj tylko, jeśli JS doda klasę .show-hint */
+.show-hint {
+    display: block !important;
+}
+
+/* Dostosowanie do Bootstrapa – usuń czerwone obramowania na start */
+.form-control.is-invalid:focus,
+.form-control.is-invalid {
+    border-color: #ced4da !important;
+    box-shadow: none !important;
+}
+

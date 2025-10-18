@@ -1,80 +1,154 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>LearnEdge - Rejestracja</title>
     <link rel="icon" type="image/x-icon" th:href="@{/img/favicon.ico}" href="../../static/img/favicon.ico"/>
 
     <!-- Bootstrap CSS -->
-    <link
-            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
-            rel="stylesheet"
-    />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
 
     <!-- Bootstrap Icons -->
-    <link
-            href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
-            rel="stylesheet"
-    />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet"/>
 
     <!-- Custom -->
     <link th:href="@{/css/pages/auth.css}" href="../../static/css/pages/auth.css" rel="stylesheet"/>
 </head>
-<body>
+
+<body data-auth="register">
 <main class="m-lg-3">
     <section class="card p-4 shadow">
         <header class="text-center mb-4">
-            <img th:src="@{/img/logo-icon.png}" src="../../static/img/logo-icon.png" alt="Logo aplikacji" width="64"
-                 height="64" class="mb-3">
+            <img th:src="@{/img/logo-icon.png}" src="../../static/img/logo-icon.png" alt="Logo aplikacji" width="64" height="64" class="mb-3">
             <h1 class="h4 fw-bold brand-gradient">LearnEdge</h1>
         </header>
+
         <p class="text-muted mb-3 text-center">
             Nie masz jeszcze konta? <br> Wypełnij poniższy formularz, aby się zarejestrować.
         </p>
 
-        <form action="/login" method="post" novalidate aria-label="Formularz logowania">
+        <form th:action="@{/rejestracja}" method="post" novalidate aria-label="Formularz rejestracji">
+            <input type="hidden" th:if="${_csrf != null}" th:name="${_csrf?.parameterName}" th:value="${_csrf?.token}"/>
 
             <div class="form-floating mb-3">
-                <input type="email" class="form-control" id="floatingInputName" placeholder="nazwa@google.com">
-                <label for="floatingInputName">Imię</label>
-            </div>
-            <div class="form-floating mb-3">
-                <input type="email" class="form-control" id="floatingInputEmail" placeholder="nazwa@google.com">
-                <label for="floatingInputEmail">E-mail</label>
-            </div>
-            <div class="form-floating mb-3">
-                <input type="password" class="form-control" id="floatingPassword" placeholder="Hasło">
-                <label for="floatingPassword">Hasło</label>
-            </div>
-            <div class="form-floating mb-3">
-                <input type="password" class="form-control" id="floatingPasswordRepeat" placeholder="Hasło">
-                <label for="floatingPassword">Powtórz hasło</label>
+                <input type="text" name="username" id="username" class="form-control" placeholder="Nazwa użytkownika" required>
+                <label for="username">Nazwa użytkownika</label>
             </div>
 
+            <div class="form-floating mb-3">
+                <input type="email" name="email" id="email" class="form-control" placeholder="nazwa@google.com" required>
+                <label for="email">E-mail</label>
+                <div id="emailHint" class="invalid-hint text-danger small mt-1">Podaj poprawny adres e-mail.</div>
+            </div>
 
-            <button type="submit" class="btn btn-gradient w-100 mb-3">Zarejestruj się</button>
+            <div class="form-floating mb-3">
+                <input type="password" name="password" id="password" class="form-control" placeholder="Hasło" required>
+                <label for="password">Hasło</label>
+
+                <!-- Pasek siły hasła -->
+                <div class="pw-wrap mt-2">
+                    <div class="pw-track bg-light rounded-pill" style="height:8px;">
+                        <div id="pwFill" class="pw-fill lv-0" style="height:8px;width:0%;border-radius:inherit;"></div>
+                    </div>
+                    <div id="pwText" class="pw-label text-muted small mt-1">Siła hasła: —</div>
+                </div>
+                <div id="weak" class="invalid-hint text-danger small mt-1">Hasło zbyt słabe (min. 8 znaków, litera i cyfra).</div>
+            </div>
+
+            <div class="form-floating mb-3">
+                <input type="password" name="passwordConfirm" id="password2" class="form-control" placeholder="Powtórz hasło" required>
+                <label for="password2">Powtórz hasło</label>
+                <div id="mismatch" class="invalid-hint text-danger small mt-1">Hasła nie są takie same.</div>
+            </div>
+
+            <button id="btn-register" type="submit" class="btn btn-gradient w-100 mb-3" >Zarejestruj się</button>
+
             <div class="d-flex justify-content-center">
-                <p>Zarejestruj się przez:</p>
+                <p class="text-muted mb-2">Zarejestruj się przez:</p>
             </div>
-            <div class="d-flex justify-content-center">
-
-                <button class="btn" type="button"><i class="bi bi-google me-2 google-icon fs-3"></i></button>
-                <button class="btn" type="button"><i class="bi bi-facebook me-2 text-primary fs-3"></i></button>
+            <div class="d-flex justify-content-center mb-3">
+                <a class="btn" th:href="@{/oauth2/authorization/google}"><i class="bi bi-google me-2 google-icon fs-3"></i></a>
+                <a class="btn" th:href="@{/oauth2/authorization/github}"><i class="bi bi-github me-2 text-dark fs-3"></i></a>
             </div>
         </form>
 
         <footer class="text-center mt-4">
-            <p class="small mb-0">Masz juz konto?
-                <a href="/login" class="text-decoration-none fw-semibold">Zaloguj się</a>
-            </p> 
+            <p class="small mb-0">Masz już konto?
+                <a th:href="@{/login}" class="text-decoration-none fw-semibold">Zaloguj się</a>
+            </p>
         </footer>
     </section>
 </main>
 
-
 <!-- Bootstrap JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+
+    // ----- Walidacja + siła hasła -----
+    (function(){
+        const username = document.getElementById('username');
+        const email    = document.getElementById('email');
+        const emailHint= document.getElementById('emailHint');
+        const pwd      = document.getElementById('password');
+        const pwd2     = document.getElementById('password2');
+        const btn      = document.getElementById('btn-register');
+        const weak     = document.getElementById('weak');
+        const mis      = document.getElementById('mismatch');
+        const pwFill   = document.getElementById('pwFill');
+        const pwText   = document.getElementById('pwText');
+
+        const strongMin = v => /^(?=.*[A-Za-z])(?=.*\d).{8,}$/.test(v||'');
+
+        function scorePassword(v){
+            if(!v) return 0;
+            let s = 0;
+            if(v.length >= 8) s++;
+            if(/[a-z]/.test(v) && /[A-Z]/.test(v)) s++;
+            if(/\d/.test(v)) s++;
+            if(/[^\w\s]/.test(v)) s++;
+            if(v.length >= 12 && s < 4) s++;
+            return Math.min(s,4);
+        }
+
+        function renderMeter(v){
+            const score = scorePassword(v);
+            const widths = ['0%','25%','50%','75%','100%'];
+            const labels = ['—','Słabe','Średnie','Dobre','Mocne'];
+
+            pwFill.className = 'pw-fill lv-' + score;
+            pwFill.style.width = widths[score];
+            pwText.textContent = 'Siła hasła: ' + labels[score];
+        }
+
+        function validate(){
+            const vUser = username.value.trim();
+            const vMail = email.value.trim();
+            const v1 = pwd.value.trim();
+            const v2 = pwd2.value.trim();
+
+            const mailOK = email.checkValidity();
+            const okStrong = strongMin(v1);
+            const okMatch  = v1 && v1 === v2;
+
+            email.classList.toggle('is-invalid', vMail.length>0 && !mailOK);
+            emailHint.classList.toggle('show-hint', vMail.length>0 && !mailOK);
+
+            pwd.classList.toggle('is-invalid', v1.length>0 && !okStrong);
+            weak.classList.toggle('show-hint', v1.length>0 && !okStrong);
+
+            pwd2.classList.toggle('is-invalid', v2.length>0 && !okMatch);
+            mis.classList.toggle('show-hint', v2.length>0 && !okMatch);
+
+            renderMeter(v1);
+
+            btn.disabled = !(vUser && mailOK && okStrong && okMatch);
+        }
+
+        [username, email, pwd, pwd2].forEach(el => el.addEventListener('input', validate));
+        renderMeter(''); validate();
+    })();
+</script>
 </body>
 </html>

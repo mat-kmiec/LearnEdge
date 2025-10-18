@@ -30,8 +30,8 @@
     <changeSet id="002-seed-user" author="learnedge" context="dev">
         <insert tableName="users">
             <column name="username" value="user"/>
-            <!-- hasło 'pass123' (BCrypt) -->
-            <column name="password" value="$2a$10$7EqJtq98hPqEX7fNZaFWoOe.v5c5QW7/dwZ0pQ8ih/NG0fY5/0WBi"/>
+            <!-- hasło 'testtest1' (BCrypt) -->
+            <column name="password" value="$2a$10$Mr3UBISp79LpU8ZWRhA8vuENJwAwIODN7Us2FGj9MlVoAmbrOmNPy"/>
             <column name="role" value="ROLE_USER"/>
             <column name="enabled" valueBoolean="true"/>
             <column name="email" value="user@example.com"/>
