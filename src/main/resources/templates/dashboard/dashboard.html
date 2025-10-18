@@ -1,79 +1,189 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8"/>
+  <head>
+    <meta charset="UTF-8" />
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>LearnEdge - Dashboard</title>
-    <link rel="icon" type="image/x-icon" th:href="@{/img/favicon.ico}" href="../../static/img/favicon.ico"/>
+    <link
+      rel="icon"
+      type="image/x-icon"
+      th:href="@{/img/favicon.ico}"
+      href="../../static/img/favicon.ico"
+    />
 
     <!-- Bootstrap CSS -->
     <link
-            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
-            rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
     />
 
     <!-- Bootstrap Icons -->
     <link
-            href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
-            rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+      rel="stylesheet"
     />
 
     <!-- Custom -->
-    <link th:href="@{/css/pages/dashboard.css}" href="../../static/css/pages/dashboard.css" rel="stylesheet"/>
-</head>
-<body>
-<nav class="navbar navbar-expand-lg fixed-top bg-white shadow">
-    <div class="container">
-
+    <link
+      th:href="@{/css/pages/dashboard.css}"
+      href="../../static/css/pages/dashboard.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg fixed-top bg-white shadow">
+      <div class="container">
         <a class="navbar-brand d-flex align-items-center" href="#">
-            <img
-                    th:src="@{/img/logo-icon.png}"
-                    src="../../static/img/logo-icon.png"
-                    alt="Logo"
-                    width="40"
-                    height="40"
-                    class="me-2"
-            />
-            <span class="brand-gradient">LearnEdge</span>
+          <img
+            th:src="@{/img/logo-icon.png}"
+            src="../../static/img/logo-icon.png"
+            alt="Logo"
+            width="40"
+            height="40"
+            class="me-2"
+          />
+          <span class="brand-gradient">LearnEdge</span>
         </a>
         <button
-                class="navbar-toggler"
-                type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#navbarNav"
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
         >
-            <span class="navbar-toggler-icon"></span>
+          <span class="navbar-toggler-icon"></span>
         </button>
         <div
-                class="collapse navbar-collapse text-center justify-content-end"
-                id="navbarNav"
+          class="collapse navbar-collapse text-center justify-content-end"
+          id="navbarNav"
         >
-            <ul class="navbar-nav align-items-lg-center gap-lg-3">
-                <li class="nav-item">
-                    <a class="nav-link" href="#section1">moje kursy</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#section2">moje konto</a>
-                </li>
+          <ul class="navbar-nav align-items-lg-center gap-lg-3">
+            <li class="nav-item">
+              <a class="nav-link" href="#section1">moje kursy</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#section2">moje konto</a>
+            </li>
 
-                <li class="nav-item d-lg-none mt-2">
-                    <a th:href="@{/logout}" href="#" class="btn btn-gradient w-100"
-                    >wyloguj</a
-                    >
-                </li>
-            </ul>
+            <li class="nav-item d-lg-none mt-2">
+              <a th:href="@{/logout}" href="#" class="btn btn-gradient w-100"
+                >wyloguj</a
+              >
+            </li>
+          </ul>
         </div>
         <a
-                th:href="@{/logout}"
-                href="#login"
-                class="btn btn-gradient ms-lg-3 d-none d-lg-inline-block"
-        >wyloguj</a
+          th:href="@{/logout}"
+          href="#login"
+          class="btn btn-gradient ms-lg-3 d-none d-lg-inline-block"
+          >wyloguj</a
         >
+      </div>
+    </nav>
+
+    <div class="container py-5">
+      <div class="dashboard-container">
+        <div
+          class="dashboard-header d-flex justify-content-between align-items-center flex-wrap"
+        >
+          <div>
+            <h1 class="mb-1">Moje kursy</h1>
+            <p class="text-light opacity-75 mb-0 small">
+              Chcesz poszerzyć swoje horyzonty?
+              <a
+                th:href="@{/dostepne-kursy}"
+                href="available-courses.html"
+                class="fw-semibold text-decoration-none"
+                style="color: var(--color-accent)"
+                >Zobacz dostępne kursy</a
+              >.
+            </p>
+          </div>
+        </div>
+
+        <div class="row g-4">
+          <!-- Kurs 1 – Słuchowiec -->
+          <div class="col-md-6 col-lg-4">
+            <div class="course-card h-100 position-relative">
+              <span
+                class="position-absolute top-0 end-0 m-3 badge rounded-pill badge-sound"
+              >
+                <i class="bi bi-headphones me-1"></i> Słuchowiec
+              </span>
+              <h5 class="fw-bold mb-2 d-flex align-items-center mt-3">
+                <i class="bi bi-code-slash me-2"></i> Programowanie w Javie
+              </h5>
+              <p class="small text-light mb-3">
+                Zrozum podstawy Javy i naucz się budować aplikacje krok po
+                kroku.
+              </p>
+              <div class="progress mb-3">
+                <div class="progress-bar" style="width: 65%"></div>
+              </div>
+              <div class="d-flex justify-content-between align-items-center">
+                <span class="small">65% ukończono</span>
+                <button class="btn btn-sm btn-gradient">Kontynuuj</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Kurs 2 – Wzrokowiec -->
+          <div class="col-md-6 col-lg-4">
+            <div class="course-card h-100 position-relative">
+              <span
+                class="position-absolute top-0 end-0 m-3 badge rounded-pill badge-visual"
+              >
+                <i class="bi bi-eye me-1"></i> Wzrokowiec
+              </span>
+              <h5 class="fw-bold mb-2 d-flex align-items-center mt-3">
+                <i class="bi bi-palette me-2"></i> UX Design dla wzrokowców
+              </h5>
+              <p class="small text-light mb-3">
+                Dowiedz się, jak projektować interfejsy, które przyciągają
+                wzrok.
+              </p>
+              <div class="progress mb-3">
+                <div class="progress-bar" style="width: 30%"></div>
+              </div>
+              <div class="d-flex justify-content-between align-items-center">
+                <span class="small">30% ukończono</span>
+                <button class="btn btn-sm btn-gradient">Kontynuuj</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Kurs 3 – Kinestetyk -->
+          <div class="col-md-6 col-lg-4">
+            <div class="course-card h-100 position-relative">
+              <span
+                class="position-absolute top-0 end-0 m-3 badge rounded-pill badge-kinesthetic"
+              >
+                <i class="bi bi-hand-index-thumb me-1"></i> Kinestetyk
+              </span>
+              <h5 class="fw-bold mb-2 d-flex align-items-center mt-3">
+                <i class="bi bi-lightning-charge me-2"></i> Efektywne uczenie
+                się
+              </h5>
+              <p class="small text-light mb-3">
+                Poznaj techniki dopasowane do Twojego stylu nauki – słuchowiec,
+                wzrokowiec lub kinestetyk.
+              </p>
+              <div class="progress mb-3">
+                <div class="progress-bar" style="width: 90%"></div>
+              </div>
+              <div class="d-flex justify-content-between align-items-center">
+                <span class="small">90% ukończono</span>
+                <button class="btn btn-sm btn-gradient">Powtórz</button>
+              </div>
+            </div>
+          </div>
+
+    
+        </div>
+      </div>
     </div>
-</nav>
-    <h1> Dashboard </h1>
-<!-- Bootstrap JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-</body>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
 </html>
