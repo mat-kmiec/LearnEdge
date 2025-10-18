@@ -23,77 +23,7 @@
     />
 
     <style>
-      /* SPECJALNE DODATKI DLA PROFILU */
-      .profile-card {
-        background: rgba(255, 255, 255, 0.08);
-        border: 1px solid rgba(255, 255, 255, 0.15);
-        border-radius: 18px;
-        padding: 2rem;
-        color: #fff;
-        backdrop-filter: blur(10px);
-        transition: all 0.35s ease;
-        box-shadow: 0 0 20px rgba(0, 0, 0, 0.25);
-      }
-
-      .profile-card:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 10px 30px rgba(0, 184, 230, 0.35);
-      }
-
-      .profile-card h5 {
-        font-weight: 600;
-        background: linear-gradient(90deg, #00b8e6, #04d1b7);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-      }
-
-      .form-control {
-        background: rgba(255, 255, 255, 0.12) !important;
-        border: 1px solid rgba(255, 255, 255, 0.25);
-        color: #fff !important;
-        border-radius: 12px;
-        transition: all 0.3s ease;
-      }
-
-      .form-control:focus {
-        border-color: var(--color-accent);
-        box-shadow: 0 0 10px rgba(4, 209, 183, 0.4);
-        background: rgba(255, 255, 255, 0.18);
-      }
-
-      label {
-        font-size: 0.9rem;
-        font-weight: 500;
-        color: rgba(255, 255, 255, 0.85);
-      }
-
-      .profile-avatar {
-        width: 120px;
-        height: 120px;
-        border-radius: 50%;
-        border: 3px solid var(--color-accent);
-        object-fit: cover;
-        box-shadow: 0 0 20px rgba(0, 184, 230, 0.4);
-        transition: all 0.3s ease;
-      }
-
-      .profile-avatar:hover {
-        transform: scale(1.05);
-      }
-
-      .profile-section-title {
-        font-size: 1.2rem;
-        font-weight: 600;
-        margin-bottom: 1rem;
-        color: #fff;
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-      }
-
-      .profile-section-title i {
-        color: var(--color-accent);
-      }
+      
     </style>
   </head>
 
@@ -129,7 +59,7 @@
               <a class="nav-link" href="dashboard.html">moje kursy</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link active" href="profile.html" th:href="@{/profil}">mój profil</a>
+              <a class="nav-link active" href="profile.html" th:href="@{/profil}">moje konto</a>
             </li>
             <li class="nav-item d-lg-none mt-2">
               <a th:href="@{/logout}" href="#" class="btn btn-gradient w-100">
@@ -247,8 +177,8 @@
           <i class="bi bi-save me-2"></i> Zapisz styl
         </button>
         <a
-          th:href="@{/ankieta-ai}"
-          href="ankieta-ai.html"
+          th:href="@{/ankieta}"
+          href="ankieta.html"
           class="btn btn-outline-primary flex-fill"
         >
           <i class="bi bi-robot me-2"></i> Wypełnij ankietę AI
