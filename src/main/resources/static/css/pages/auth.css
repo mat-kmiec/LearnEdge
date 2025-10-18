@@ -79,3 +79,28 @@ button:hover{
     transform: scale(1.05);
 }
 
+/* Domyślnie ukrywaj podpowiedzi błędów */
+.invalid-hint {
+    display: none;
+}
+
+/* Pokazuj tylko, jeśli JS doda klasę .show-hint */
+.show-hint {
+    display: block !important;
+}
+
+/* Dostosowanie do Bootstrapa – usuń czerwone obramowania na start */
+.form-control.is-invalid:focus,
+.form-control.is-invalid {
+    border-color: #ced4da !important;
+    box-shadow: none !important;
+}
+
+.pw-fill.lv-0 { background-color: transparent; }
+.pw-fill.lv-1 { background-color: #dc3545; }   /* czerwony – słabe */
+.pw-fill.lv-2 { background-color: #fd7e14; }   /* pomarańczowy – średnie */
+.pw-fill.lv-3 { background-color: #ffc107; }   /* żółty – dobre */
+.pw-fill.lv-4 { background-color: #28a745; }   /* zielony – mocne */
+.show-hint { display: block !important; }
+.invalid-hint { display: none; }
+

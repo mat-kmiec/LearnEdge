@@ -11,20 +11,20 @@ public class HomeController {
         return "home/index";
     }
 
-    @GetMapping("/logowanie")
-    public String login() {
-        return "home/login";
-    }
+//    @GetMapping("/logowanie")
+//    public String login() {
+//        return "home/login";
+//    }
 
     @GetMapping("/przypomnij-haslo")
     public String forgotPassword() {
         return "home/forgot-password";
     }
 
-    @GetMapping("/rejestracja")
-    public String register() {
-        return "home/register";
-    }
+//    @GetMapping("/rejestracja")
+//    public String register() {
+//        return "home/register";
+//    }
 
 
 }
