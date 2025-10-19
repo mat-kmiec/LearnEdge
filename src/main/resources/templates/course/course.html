@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="pl">
+  <head>
+    <meta charset="UTF-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LearnEdge - Kurs</title>
+    <link
+      rel="icon"
+      type="image/x-icon"
+      th:href="@{/img/favicon.ico}"
+      href="../../static/img/favicon.ico"
+    />
+
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+
+    <!-- Bootstrap Icons -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+      rel="stylesheet"
+    />
+
+    <!-- Custom -->
+    <link
+      th:href="@{/css/pages/dashboard.css}"
+      href="../../static/css/pages/dashboard.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg fixed-top bg-white shadow">
+      <div class="container">
+        <a class="navbar-brand d-flex align-items-center" href="#">
+          <img
+            th:src="@{/img/logo-icon.png}"
+            src="../../static/img/logo-icon.png"
+            alt="Logo"
+            width="40"
+            height="40"
+            class="me-2"
+          />
+          <span class="brand-gradient">LearnEdge</span>
+        </a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div
+          class="collapse navbar-collapse text-center justify-content-end"
+          id="navbarNav"
+        >
+          <ul class="navbar-nav align-items-lg-center gap-lg-3">
+            <li class="nav-item">
+              <a class="nav-link" href="#section1">moje kursy</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="profile.html" th:href="@{/profil}">moje konto</a>
+            </li>
+
+            <li class="nav-item d-lg-none mt-2">
+              <a th:href="@{/logout}" href="#" class="btn btn-gradient w-100"
+                >wyloguj</a
+              >
+            </li>
+          </ul>
+        </div>
+        <a
+          th:href="@{/logout}"
+          href="#login"
+          class="btn btn-gradient ms-lg-3 d-none d-lg-inline-block"
+          >wyloguj</a
+        >
+      </div>
+    </nav>
+
+    <div class="container py-5">
+      <div class="dashboard-container">
+        <div
+          class="dashboard-header d-flex justify-content-between align-items-center flex-wrap"
+        >
+          <div>
+            <h1 class="mb-1">Programowanie w Javie</h1>
+            <p class="text-light opacity-75 mb-0 small">
+              Zrozum podstawy Javy i naucz się budować aplikacje krok po kroku. 
+            </p>
+          </div>
+        </div>
+
+        <div class="row g-4">
+          
+          <div class="col-md-6 col-lg-4">
+            <div class="course-card h-100 position-relative">
+              <span
+                class="position-absolute top-0 end-0 m-3 badge rounded-pill bg-secondary"
+              >
+                 Nieukończone
+              </span>
+              <h5 class="fw-bold mb-2 d-flex align-items-center mt-3">
+                 Typy zmiennych w java
+              </h5>
+              <p class="small text-light mb-3">
+                Lekcja 1
+              </p>
+
+              <div class="d-flex justify-content-end">
+                <button class="btn btn-sm btn-gradient">Wybierz</button>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-4">
+            <div class="course-card h-100 position-relative">
+              <span
+                class="position-absolute top-0 end-0 m-3 badge rounded-pill bg-secondary"
+              >
+                 Nieukończone
+              </span>
+              <h5 class="fw-bold mb-2 d-flex align-items-center mt-3">
+                 Tworzenie komentarzy w java
+              </h5>
+              <p class="small text-light mb-3">
+                Lekcja 2
+              </p>
+
+              <div class="d-flex justify-content-end">
+                <button class="btn btn-sm btn-gradient">Wybierz</button>
+              </div>
+            </div>
+          </div>
+          
+          
+
+          
+
+    
+        </div>
+      </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>
