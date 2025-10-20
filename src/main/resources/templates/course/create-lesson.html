@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="pl">
+  <head>
+    <meta charset="UTF-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LearnEdge - Lekcja</title>
+    <link
+      rel="icon"
+      type="image/x-icon"
+      th:href="@{/img/favicon.ico}"
+      href="../../static/img/favicon.ico"
+    />
+
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+
+    <!-- Bootstrap Icons -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+      rel="stylesheet"
+    />
+
+    <!-- Custom -->
+    <link
+      th:href="@{/css/pages/dashboard.css}"
+      href="../../static/css/pages/dashboard.css"
+      rel="stylesheet"
+    />
+
+    <link
+      th:href="@{/css/pages/course.css}"
+      href="../../static/css/pages/course.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg fixed-top bg-white shadow">
+      <div class="container">
+        <a class="navbar-brand d-flex align-items-center" href="#">
+          <img
+            th:src="@{/img/logo-icon.png}"
+            src="../../static/img/logo-icon.png"
+            alt="Logo"
+            width="40"
+            height="40"
+            class="me-2"
+          />
+          <span class="brand-gradient">LearnEdge</span>
+        </a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div
+          class="collapse navbar-collapse text-center justify-content-end"
+          id="navbarNav"
+        >
+          <ul class="navbar-nav align-items-lg-center gap-lg-3">
+            <li class="nav-item">
+              <a class="nav-link" href="#section1">moje kursy</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="profile.html" th:href="@{/profil}"
+                >moje konto</a
+              >
+            </li>
+
+            <li class="nav-item d-lg-none mt-2">
+              <a th:href="@{/logout}" href="#" class="btn btn-gradient w-100"
+                >wyloguj</a
+              >
+            </li>
+          </ul>
+        </div>
+        <a
+          th:href="@{/logout}"
+          href="#login"
+          class="btn btn-gradient ms-lg-3 d-none d-lg-inline-block"
+          >wyloguj</a
+        >
+      </div>
+    </nav>
+
+    <div class="container py-5">
+      <div class="creator-container">
+        <div
+          class="dashboard-header d-flex justify-content-between align-items-center flex-wrap"
+        >
+          <div>
+            <h1 class="mb-1">Kreator lekcji</h1>
+            <p class="text-light opacity-75 mb-1 small">
+              Zbuduj własną lekcję krok po kroku — od teorii po praktyczne
+              ćwiczenia i quizy.
+            </p>
+          </div>
+        </div>
+
+        <div class="course-creator-block my-5 p-1">
+          <h2 class="course-section-title mb-4">
+            <i class="bi bi-pencil-square me-2"></i>Kreator lekcji — część 1
+          </h2>
+
+          <form>
+            <!-- Nazwa lekcji -->
+            <div class="mb-4">
+              <label for="lessonName" class="form-label">Nazwa lekcji</label>
+              <input
+                type="text"
+                id="lessonName"
+                class="form-control"
+                placeholder="Wprowadź tytuł lekcji..."
+              />
+            </div>
+
+            <!-- Styl nauki -->
+            <div class="mb-4">
+              <label for="learningStyle" class="form-label">Styl nauki</label>
+              <select
+                id="learningStyle"
+                class="form-select custom-select-learnedge"
+              >
+                <option value="" disabled selected>Wybierz styl...</option>
+                <option value="visual">
+                  👁️ Wizualny (obraz, wykres, diagram)
+                </option>
+                <option value="auditory">
+                  🎧 Słuchowy (nagranie, narracja)
+                </option>
+                <option value="kinesthetic">
+                  🧠 Kinestetyczny (działanie, ćwiczenie)
+                </option>
+              </select>
+            </div>
+
+            <!-- Informacja o kursie (zablokowane) -->
+            <div class="">
+              <label for="courseName" class="form-label"
+                >Lekcja należy do kursu</label
+              >
+              <input
+                type="text"
+                id="courseName"
+                class="form-control"
+                value="Programowanie w Javie — poziom podstawowy"
+                disabled
+              />
+            </div>
+          </form>
+
+          <div class="course-block-buttons text-left my-5">
+            <h4 class="course-section-title mb-4">
+              <i class="bi bi-pencil-square me-2"></i>Kreator lekcji — część 2
+            </h4>
+
+            <div class="d-flex flex-wrap justify-content-center gap-3">
+              <!-- Główne bloki -->
+              <button
+                class="btn btn-gradient"
+                data-bs-toggle="modal"
+                data-bs-target="#addTextModal"
+              >
+                <i class="bi bi-file-text me-2"></i> Tekst
+              </button>
+
+              <button
+                class="btn btn-gradient"
+                data-bs-toggle="modal"
+                data-bs-target="#addHeaderModal"
+              >
+                <i class="bi bi-type-h1 me-2"></i> Nagłówek
+              </button>
+
+              <button
+                class="btn btn-gradient"
+                data-bs-toggle="modal"
+                data-bs-target="#addImageModal"
+              >
+                <i class="bi bi-image me-2"></i> Obraz
+              </button>
+
+              <button
+                class="btn btn-gradient"
+                data-bs-toggle="modal"
+                data-bs-target="#addVideoModal"
+              >
+                <i class="bi bi-camera-video me-2"></i> Wideo
+              </button>
+
+              <button
+                class="btn btn-gradient"
+                data-bs-toggle="modal"
+                data-bs-target="#addAudioModal"
+              >
+                <i class="bi bi-mic me-2"></i> Audio
+              </button>
+
+              <button
+                class="btn btn-gradient"
+                data-bs-toggle="modal"
+                data-bs-target="#addCodeModal"
+              >
+                <i class="bi bi-terminal me-2"></i> Kod
+              </button>
+
+              <button
+                class="btn btn-gradient"
+                data-bs-toggle="modal"
+                data-bs-target="#addQuizModal"
+              >
+                <i class="bi bi-question-circle me-2"></i> Quiz
+              </button>
+
+              <button
+                class="btn btn-gradient"
+                data-bs-toggle="modal"
+                data-bs-target="#addQAModal"
+              >
+                <i class="bi bi-chat-text me-2"></i> Pytanie / Odpowiedź
+              </button>
+
+              <button
+                class="btn btn-gradient"
+                data-bs-toggle="modal"
+                data-bs-target="#addFillModal"
+              >
+                <i class="bi bi-braces me-2"></i> Uzupełnij kod
+              </button>
+
+              <!-- Notatki tematyczne -->
+              <button
+                class="btn btn-gradient"
+                data-bs-toggle="modal"
+                data-bs-target="#addNoteModal"
+              >
+                <i class="bi bi-stickies me-2"></i> Notatka
+              </button>
+
+              <button
+                class="btn btn-gradient"
+                data-bs-toggle="modal"
+                data-bs-target="#addTipModal"
+              >
+                <i class="bi bi-lightbulb me-2"></i> Wskazówka
+              </button>
+
+              <button
+                class="btn btn-gradient"
+                data-bs-toggle="modal"
+                data-bs-target="#addIdeaModal"
+              >
+                <i class="bi bi-rocket-takeoff me-2"></i> Pomysł
+              </button>
+
+              <button
+                class="btn btn-gradient"
+                data-bs-toggle="modal"
+                data-bs-target="#addWarningModal"
+              >
+                <i class="bi bi-exclamation-triangle me-2"></i> Uwaga
+              </button>
+
+              <button
+                class="btn btn-gradient"
+                data-bs-toggle="modal"
+                data-bs-target="#addFactModal"
+              >
+                <i class="bi bi-info-circle me-2"></i> Ciekawostka
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="dashboard-container my-5 p-4">
+        <div
+          class="dashboard-header d-flex justify-content-between align-items-center flex-wrap"
+        >
+          <div>
+            <h1 class="mb-1">Podgląd lekcji</h1>
+          </div>
+        </div>
+
+        <!-- PRZYKŁADOWE ELEMENTY LEKCJI -->
+        <div  id="lessonPreview" class="lesson-content"></div>
+      </div>
+    </div>
+
+    <!-- Dodawanie nagłowka modal -->
+    <div
+      class="modal fade"
+      id="addHeaderModal"
+      tabindex="-1"
+      aria-labelledby="addHeaderModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content bg-dark text-light rounded-4 border-0 p-3">
+          <div class="modal-header border-0">
+            <h5 class="modal-title" id="addHeaderModalLabel">
+              <i class="bi bi-type-h1 me-2"></i>Dodaj nagłówek
+            </h5>
+            <button
+              type="button"
+              class="btn-close btn-close-white"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+
+          <div class="modal-body">
+            <label for="headerText" class="form-label">Treść nagłówka</label>
+            <input
+              type="text"
+              id="headerText"
+              class="form-control"
+              placeholder="Wpisz tytuł sekcji..."
+            />
+          </div>
+
+          <div class="modal-footer border-0">
+            <button
+              type="button"
+              class="btn btn-gradient w-100"
+              id="addHeaderBtn"
+            >
+              <i class="bi bi-check-circle me-1"></i> Dodaj do lekcji
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: Dodaj tekst -->
+<div
+  class="modal fade"
+  id="addTextModal"
+  tabindex="-1"
+  aria-labelledby="addTextModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addTextModalLabel">
+          <i class="bi bi-paragraph me-2"></i>Dodaj tekst
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+
+      <div class="modal-body">
+        <label for="lessonText" class="form-label">Treść akapitu</label>
+        <textarea
+          id="lessonText"
+          class="form-control"
+          rows="4"
+          placeholder="Wpisz treść lekcji, np. opis pojęcia lub teorię..."
+        ></textarea>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-gradient" id="addTextBtn">
+          <i class="bi bi-check-circle me-1"></i>Dodaj do lekcji
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Dodaj obraz -->
+<div
+  class="modal fade"
+  id="addImageModal"
+  tabindex="-1"
+  aria-labelledby="addImageModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addImageModalLabel">
+          <i class="bi bi-image me-2"></i>Dodaj obraz
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+
+      <div class="modal-body">
+        <label for="lessonImage" class="form-label">Wybierz plik graficzny</label>
+        <input
+          type="file"
+          id="lessonImage"
+          class="form-control"
+          accept="image/*"
+        />
+
+        <label for="imageDescription" class="form-label mt-3"
+          >Opis (opcjonalny)</label
+        >
+        <input
+          type="text"
+          id="imageDescription"
+          class="form-control"
+          placeholder="Krótki opis obrazu..."
+        />
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-gradient" id="addImageBtn">
+          <i class="bi bi-check-circle me-1"></i>Dodaj do lekcji
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Dodaj wideo -->
+<div
+  class="modal fade"
+  id="addVideoModal"
+  tabindex="-1"
+  aria-labelledby="addVideoModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addVideoModalLabel">
+          <i class="bi bi-youtube me-2"></i>Dodaj wideo
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+
+      <div class="modal-body">
+        <label for="videoLink" class="form-label">Link do filmu YouTube</label>
+        <input
+          type="text"
+          id="videoLink"
+          class="form-control"
+          placeholder="np. https://www.youtube.com/watch?v=YF59k3gZeb4"
+        />
+
+        <label for="videoTitle" class="form-label mt-3">Tytuł filmu (opcjonalny)</label>
+        <input
+          type="text"
+          id="videoTitle"
+          class="form-control"
+          placeholder="Krótki opis wideo..."
+        />
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-gradient" id="addVideoBtn">
+          <i class="bi bi-check-circle me-1"></i>Dodaj do lekcji
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../../static/js/course.js"></script>
+  </body>
+</html>
