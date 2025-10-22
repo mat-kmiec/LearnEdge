@@ -37,4 +37,9 @@ public class AuthController {
             return "redirect:/rejestracja?error=" + ex.getMessage().replace(" ", "%20");
         }
     }
+
+    @GetMapping("/przypomnij-haslo")
+    public String forgotPassword() {
+        return "home/forgot-password";
+    }
 }
