@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import pl.learnedge.exception.UserNotFoundException;
 import pl.learnedge.repository.UserRepository;
 
 import java.util.List;
@@ -20,6 +21,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return users.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("Nie ma takiego użytkownika"));
+                .orElseThrow(() -> new UserNotFoundException());
     }
 }

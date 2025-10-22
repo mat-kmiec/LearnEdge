@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import pl.learnedge.exception.EmailAlreadyTakenException;
+import pl.learnedge.exception.UserAlreadyExistException;
 import pl.learnedge.model.User;
 import pl.learnedge.repository.UserRepository;
 
@@ -17,10 +19,10 @@ public class UserService {
     @Transactional
     public User register(String username, String email, String rawPassword) {
         if (users.existsByUsername(username)) {
-            throw new IllegalArgumentException("Użytkownik o takiej nazwie już istnieje");
+            throw new UserAlreadyExistException();
         }
         if (email != null && !email.isBlank() && users.existsByEmail(email)) {
-            throw new IllegalArgumentException("Email jest już zajęty");
+            throw new EmailAlreadyTakenException();
         }
 
         var user = User.builder()
