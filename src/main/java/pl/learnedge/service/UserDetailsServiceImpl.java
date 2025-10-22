@@ -19,13 +19,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        var u = users.findByUsername(username)
+        return users.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Nie ma takiego użytkownika"));
-        return org.springframework.security.core.userdetails.User.builder()
-                .username(u.getUsername())
-                .password(u.getPassword())
-                .disabled(!u.isEnabled())
-                .authorities(List.of(new SimpleGrantedAuthority(u.getRole())))
-                .build();
     }
 }
