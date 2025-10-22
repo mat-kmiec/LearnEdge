@@ -1,3 +1,12 @@
+// // 🔹 Funkcja pomocnicza do pobierania zaznaczonych typów uczenia się
+// function getSelectedLearningTypes(modalElement) {
+//   const checked = modalElement.querySelectorAll(".learning-type:checked");
+//   if (!checked.length) return "0"; // 0 = wszyscy
+//   return Array.from(checked)
+//     .map(cb => cb.value)
+//     .join(","); // np. "1,2"
+// }
+
 // Obsługa quizu z wyborem odpowiedzi
 document.addEventListener("click", (e) => {
   if (e.target.classList.contains("course-quiz-option")) {
@@ -93,10 +102,11 @@ const lessonBlocks = [];
 
 // Funkcja do generowania HTML na podstawie obiektu
 function generateBlockHTML(block) {
+   const attr = `data-learning="${block.learning || '0'}"`; // <— TU
   switch (block.type) {
     case "header":
       return `
-      <div>
+      <div ${attr}>
         <h3 class="course-section-title text-start mt-0 mb-3">
           ${block.content}
         </h3>
@@ -104,7 +114,7 @@ function generateBlockHTML(block) {
       `;
     case "text":
       return `
-          <div class="course-text-content">
+          <div class="course-text-content" ${attr}>
             <p>
               ${block.content}
             </p>
@@ -112,7 +122,7 @@ function generateBlockHTML(block) {
       `;
     case "image":
       return `
-        <div class="course-image-container my-4">
+        <div class="course-image-container my-4" ${attr}>
           <img
             src="${block.previewSrc}"
             alt="${block.alt}"
@@ -122,7 +132,7 @@ function generateBlockHTML(block) {
       `;
     case "video":
       return `
-        <div class="course-video-container my-4">
+        <div class="course-video-container my-4" ${attr}>
           <iframe
             src="${block.src}"
             title="${block.title}"
@@ -133,7 +143,7 @@ function generateBlockHTML(block) {
       `;
     case "code":
       return `
-    <div class="course-code-block my-4">
+    <div class="course-code-block my-4" ${attr}>
       <div class="course-code-header d-flex justify-content-between align-items-center mb-2">
         <span><i class="bi bi-code-slash me-2"></i>${block.title}</span>
         <button class="btn btn-sm btn-outline-light course-copy-btn" onclick="copyCode(this)">
@@ -147,7 +157,7 @@ function generateBlockHTML(block) {
   `;
     case "quiz":
       return `
-    <div class="course-quiz-block my-4">
+    <div class="course-quiz-block my-4" ${attr}>
       <h4 class="course-quiz-question mb-3">
         <i class="bi bi-pencil-square me-2"></i>${block.question}
       </h4>
@@ -176,7 +186,7 @@ function generateBlockHTML(block) {
         .join("");
 
       return `
-    <div class="course-quiz-block my-4">
+    <div class="course-quiz-block my-4" ${attr}>
       <h4 class="course-quiz-question mb-3">
         <i class="bi bi-question-circle me-2"></i>${block.question}
       </h4>
@@ -193,7 +203,7 @@ function generateBlockHTML(block) {
       );
 
       return `
-    <div class="course-practice-block my-4">
+    <div class="course-practice-block my-4" ${attr}>
       <h4 class="course-section-title mb-1">
         <i class="bi bi-terminal me-2"></i>${block.title}
       </h4>
@@ -204,14 +214,14 @@ function generateBlockHTML(block) {
   `;
     case "note":
       return `
-    <div class="course-note my-4">
+    <div class="course-note my-4" ${attr}>
       <i class="bi bi-journal-text me-2"></i>
       <strong>Notatka:</strong> ${block.content}
     </div>
   `;
     case "tip":
       return `
-    <div class="course-text-block tip mt-3 mb-3">
+    <div class="course-text-block tip mt-3 mb-3" ${attr}>
       <h5 class="course-text-title">
         <i class="bi bi-lightbulb me-2"></i>Wskazówka
       </h5>
@@ -222,28 +232,28 @@ function generateBlockHTML(block) {
   `;
     case "idea":
       return `
-    <div class="course-idea my-4">
+    <div class="course-idea my-4" ${attr}>
       <i class="bi bi-lightbulb me-2"></i>
       <strong>Pomysł:</strong> ${block.content}
     </div>
   `;
     case "warning":
       return `
-    <div class="course-warning my-4">
+    <div class="course-warning my-4" ${attr}>
       <i class="bi bi-exclamation-triangle me-2 text-warning"></i>
       <strong>Uwaga:</strong> ${block.content}
     </div>
   `;
     case "fact":
       return `
-    <div class="course-fact my-4">
+    <div class="course-fact my-4" ${attr}>
       <i class="bi bi-info-circle me-2 text-info"></i>
       <strong>Ciekawostka:</strong> ${block.content}
     </div>
   `;
     case "audio":
       return `
-    <div class="course-audio-container my-4">
+    <div class="course-audio-container my-4" ${attr}>
       <audio controls>
         <source src="${block.src}" type="audio/mpeg" />
         Twoja przeglądarka nie obsługuje elementu audio.
@@ -263,20 +273,27 @@ function updateLessonPreview() {
 }
 
 // Obsługa dodawania nagłówka z modala
-document.getElementById("addHeaderBtn").addEventListener("click", () => {
+document.getElementById("addHeaderBtn").addEventListener("click", (e) => {
   const input = document.getElementById("headerText");
   const value = input.value.trim();
+  const modal = e.target.closest(".modal"); // ⬅️ pobieramy modal, z którego kliknięto
 
   if (!value) {
     input.classList.add("is-invalid");
     return;
   }
 
+  // 🔹 Pobieramy zaznaczone typy uczniów
+  const selected = [...modal.querySelectorAll(".learning-type:checked")]
+    .map(cb => cb.value)
+    .join(",") || "0"; // jeśli nic nie zaznaczone → 0 = wszyscy
+
   // Tworzymy obiekt typu nagłówek
   const newBlock = {
     id: Date.now(),
     type: "header",
     content: value,
+    learning: selected, // 🧠 zapisz atrybut
   };
 
   // Dodajemy do tablicy
@@ -288,46 +305,54 @@ document.getElementById("addHeaderBtn").addEventListener("click", () => {
   // Czyścimy input i zamykamy modal
   input.value = "";
   input.classList.remove("is-invalid");
+  modal.querySelectorAll(".learning-type:checked").forEach(cb => cb.checked = false);
 
-  const modal = bootstrap.Modal.getInstance(
-    document.getElementById("addHeaderModal")
-  );
-  modal.hide();
+  const bsModal = bootstrap.Modal.getInstance(modal);
+  bsModal.hide();
 
   console.log("Aktualne bloki lekcji:", lessonBlocks);
 });
 
+
 // Obsługa dodawania tekstu
-document.getElementById("addTextBtn").addEventListener("click", () => {
+document.getElementById("addTextBtn").addEventListener("click", (e) => {
   const textarea = document.getElementById("lessonText");
   const value = textarea.value.trim();
+  const modal = e.target.closest(".modal"); // pobieramy modal, w którym kliknięto
 
   if (!value) {
     textarea.classList.add("is-invalid");
     return;
   }
 
+  // 🔹 Pobieramy zaznaczone typy uczniów
+  const selected = [...modal.querySelectorAll(".learning-type:checked")]
+    .map(cb => cb.value)
+    .join(",") || "0"; // jeśli nic nie zaznaczone → 0 = wszyscy
+
   // Tworzymy obiekt typu "text"
   const newBlock = {
     id: Date.now(),
     type: "text",
     content: value,
+    learning: selected, // 🧠 dodane
   };
 
+  // Dodajemy do tablicy
   lessonBlocks.push(newBlock);
   updateLessonPreview();
 
   // Czyścimy pole i zamykamy modal
   textarea.value = "";
   textarea.classList.remove("is-invalid");
+  modal.querySelectorAll(".learning-type:checked").forEach(cb => cb.checked = false);
 
-  const modal = bootstrap.Modal.getInstance(
-    document.getElementById("addTextModal")
-  );
-  modal.hide();
+  const bsModal = bootstrap.Modal.getInstance(modal);
+  bsModal.hide();
 
   console.log("Aktualne bloki lekcji:", lessonBlocks);
 });
+
 
 // 🔹 Tablica na pliki oczekujące na upload
 const pendingFiles = [];
@@ -371,7 +396,8 @@ document.getElementById("imageFile").addEventListener("change", (e) => {
 });
 
 // 🔹 Dodanie obrazu do lekcji (bez wysyłania)
-document.getElementById("addImageBtn").addEventListener("click", () => {
+document.getElementById("addImageBtn").addEventListener("click", (e) => {
+  const modal = e.target.closest(".modal"); // ⬅️ aktualny modal (addImageModal)
   const fileInput = document.getElementById("imageFile");
   const file = fileInput.files[0];
 
@@ -388,12 +414,19 @@ document.getElementById("addImageBtn").addEventListener("click", () => {
 
   const previewUrl = URL.createObjectURL(file);
 
+  // 🔹 Pobieramy zaznaczone typy uczniów z modala
+  const selected = [...modal.querySelectorAll(".learning-type:checked")]
+    .map(cb => cb.value)
+    .join(",") || "0"; // jeśli nic nie zaznaczone → 0 = wszyscy
+
+  // 🔹 Tworzymy blok z atrybutem learning
   const newBlock = {
     id: Date.now(),
     type: "image",
     previewSrc: previewUrl, // tylko podgląd
     fileExtension: ext,
     tempFileIndex: pendingImageFiles.length, // numer pliku lokalnie
+    learning: selected, // 🧠 dodane
   };
 
   // zapisujemy plik do pamięci lokalnej
@@ -404,10 +437,14 @@ document.getElementById("addImageBtn").addEventListener("click", () => {
 
   // Reset i zamknięcie modala
   fileInput.value = "";
+  modal.querySelectorAll(".learning-type:checked").forEach(cb => cb.checked = false);
   document.getElementById("imagePreview").classList.add("d-none");
-  const modal = bootstrap.Modal.getInstance(document.getElementById("addImageModal"));
-  modal.hide();
+  const bsModal = bootstrap.Modal.getInstance(modal);
+  bsModal.hide();
+
+  console.log("Aktualne bloki lekcji:", lessonBlocks);
 });
+
 
 
 function updateLessonPreview() {
@@ -417,7 +454,8 @@ function updateLessonPreview() {
 }
 
 // 🔹 Obsługa modala "Dodaj wideo"
-document.getElementById("addVideoBtn").addEventListener("click", () => {
+document.getElementById("addVideoBtn").addEventListener("click", (e) => {
+  const modal = e.target.closest(".modal"); // pobieramy modal
   const linkInput = document.getElementById("videoLink");
   const titleInput = document.getElementById("videoTitle");
 
@@ -429,8 +467,12 @@ document.getElementById("addVideoBtn").addEventListener("click", () => {
     return;
   }
 
+  // 🔹 Pobieramy zaznaczone typy uczniów
+  const selected = [...modal.querySelectorAll(".learning-type:checked")]
+    .map(cb => cb.value)
+    .join(",") || "0"; // 0 = wszyscy
+
   // Zamiana linku YouTube na format embeddable
-  // np. https://www.youtube.com/watch?v=YF59k3gZeb4 → https://www.youtube.com/embed/YF59k3gZeb4
   const embedLink = link.replace("watch?v=", "embed/");
 
   // Tworzymy blok lekcji
@@ -439,59 +481,22 @@ document.getElementById("addVideoBtn").addEventListener("click", () => {
     type: "video",
     src: embedLink,
     title: title,
+    learning: selected, // 🧠 dodane
   };
 
-  // Dodajemy do tablicy i aktualizujemy podgląd
   lessonBlocks.push(newBlock);
   updateLessonPreview();
 
   // Czyścimy pola i zamykamy modal
   linkInput.value = "";
   titleInput.value = "";
-
-  const modal = bootstrap.Modal.getInstance(
-    document.getElementById("addVideoModal")
-  );
-  modal.hide();
+  modal.querySelectorAll(".learning-type:checked").forEach(cb => cb.checked = false);
+  const bsModal = bootstrap.Modal.getInstance(modal);
+  bsModal.hide();
 
   console.log("Bloki lekcji:", lessonBlocks);
 });
 
-// 🔹 Obsługa modala "Dodaj blok kodu"
-document.getElementById("addCodeBtn").addEventListener("click", () => {
-  const title =
-    document.getElementById("codeTitle").value.trim() || "Przykład kodu";
-  const language = document.getElementById("codeLanguage").value || "text";
-  const content = document.getElementById("codeContent").value.trim();
-
-  if (!content) {
-    alert("Wpisz lub wklej kod przed dodaniem!");
-    return;
-  }
-
-  const newBlock = {
-    id: Date.now(),
-    type: "code",
-    title,
-    language,
-    code: content,
-  };
-
-  lessonBlocks.push(newBlock);
-  updateLessonPreview();
-
-  // czyszczenie pól i zamknięcie modala
-  document.getElementById("codeTitle").value = "";
-  document.getElementById("codeLanguage").selectedIndex = 0;
-  document.getElementById("codeContent").value = "";
-
-  const modal = bootstrap.Modal.getInstance(
-    document.getElementById("addCodeModal")
-  );
-  modal.hide();
-
-  console.log("Bloki lekcji:", lessonBlocks);
-});
 
 function escapeHtml(text) {
   return text
@@ -503,7 +508,8 @@ function escapeHtml(text) {
 }
 
 // 🔹 Obsługa modala "Dodaj pytanie / odpowiedź"
-document.getElementById("addQuestionBtn").addEventListener("click", () => {
+document.getElementById("addQuestionBtn").addEventListener("click", (e) => {
+  const modal = e.target.closest(".modal");
   const question = document.getElementById("quizQuestion").value.trim();
   const answer = document.getElementById("quizAnswer").value.trim();
 
@@ -512,35 +518,37 @@ document.getElementById("addQuestionBtn").addEventListener("click", () => {
     return;
   }
 
+  const selected = [...modal.querySelectorAll(".learning-type:checked")]
+    .map(cb => cb.value)
+    .join(",") || "0";
+
   const newBlock = {
     id: Date.now(),
     type: "quiz",
     question,
     answer,
+    learning: selected,
   };
 
   lessonBlocks.push(newBlock);
   updateLessonPreview();
 
-  // czyścimy i zamykamy modal
   document.getElementById("quizQuestion").value = "";
   document.getElementById("quizAnswer").value = "";
-  const modal = bootstrap.Modal.getInstance(
-    document.getElementById("addQuestionModal")
-  );
-  modal.hide();
-
-  console.log("Bloki lekcji:", lessonBlocks);
+  modal.querySelectorAll(".learning-type:checked").forEach(cb => cb.checked = false);
+  const bsModal = bootstrap.Modal.getInstance(modal);
+  bsModal.hide();
 });
 
+
 // 🔹 Obsługa modala "Dodaj quiz z opcjami"
-document.getElementById("addQuizBtn").addEventListener("click", () => {
+document.getElementById("addQuizBtn").addEventListener("click", (e) => {
+  const modal = e.target.closest(".modal");
   const question = document.getElementById("quizMultiQuestion").value.trim();
   const options = Array.from(document.querySelectorAll(".quiz-option-input"))
     .map((i) => i.value.trim())
     .filter((v) => v !== "");
-  const correctIndex =
-    parseInt(document.getElementById("quizCorrectIndex").value) - 1;
+  const correctIndex = parseInt(document.getElementById("quizCorrectIndex").value) - 1;
 
   if (!question || options.length < 2) {
     alert("Podaj pytanie i co najmniej dwie odpowiedzi!");
@@ -548,12 +556,13 @@ document.getElementById("addQuizBtn").addEventListener("click", () => {
   }
 
   if (correctIndex < 0 || correctIndex >= options.length) {
-    alert(
-      "Numer poprawnej odpowiedzi musi mieścić się w zakresie 1–" +
-        options.length
-    );
+    alert("Numer poprawnej odpowiedzi musi mieścić się w zakresie 1–" + options.length);
     return;
   }
+
+  const selected = [...modal.querySelectorAll(".learning-type:checked")]
+    .map(cb => cb.value)
+    .join(",") || "0";
 
   const newBlock = {
     id: Date.now(),
@@ -561,29 +570,26 @@ document.getElementById("addQuizBtn").addEventListener("click", () => {
     question,
     options,
     correctIndex,
+    learning: selected,
   };
 
   lessonBlocks.push(newBlock);
   updateLessonPreview();
 
-  // czyszczenie modala
   document.getElementById("quizMultiQuestion").value = "";
-  document
-    .querySelectorAll(".quiz-option-input")
-    .forEach((i) => (i.value = ""));
+  document.querySelectorAll(".quiz-option-input").forEach((i) => (i.value = ""));
   document.getElementById("quizCorrectIndex").value = 1;
+  modal.querySelectorAll(".learning-type:checked").forEach(cb => cb.checked = false);
 
-  const modal = bootstrap.Modal.getInstance(
-    document.getElementById("addQuizModal")
-  );
-  modal.hide();
+  const bsModal = bootstrap.Modal.getInstance(modal);
+  bsModal.hide();
 });
 
+
 // 🔹 Obsługa modala "Dodaj ćwiczenie praktyczne"
-document.getElementById("addPracticeBtn").addEventListener("click", () => {
-  const title =
-    document.getElementById("practiceTitle").value.trim() ||
-    "Ćwiczenie praktyczne";
+document.getElementById("addPracticeBtn").addEventListener("click", (e) => {
+  const modal = e.target.closest(".modal");
+  const title = document.getElementById("practiceTitle").value.trim() || "Ćwiczenie praktyczne";
   const code = document.getElementById("practiceCode").value.trim();
   const answer = document.getElementById("practiceAnswer").value.trim();
   const language = document.getElementById("practiceLang").value || "java";
@@ -593,6 +599,10 @@ document.getElementById("addPracticeBtn").addEventListener("click", () => {
     return;
   }
 
+  const selected = [...modal.querySelectorAll(".learning-type:checked")]
+    .map(cb => cb.value)
+    .join(",") || "0";
+
   const newBlock = {
     id: Date.now(),
     type: "practice",
@@ -600,27 +610,26 @@ document.getElementById("addPracticeBtn").addEventListener("click", () => {
     code,
     answer,
     language,
+    learning: selected,
   };
 
   lessonBlocks.push(newBlock);
   updateLessonPreview();
 
-  // czyszczenie pól i zamknięcie modala
   document.getElementById("practiceTitle").value = "";
   document.getElementById("practiceCode").value = "";
   document.getElementById("practiceAnswer").value = "";
   document.getElementById("practiceLang").selectedIndex = 0;
+  modal.querySelectorAll(".learning-type:checked").forEach(cb => cb.checked = false);
 
-  const modal = bootstrap.Modal.getInstance(
-    document.getElementById("addPracticeModal")
-  );
-  modal.hide();
-
-  console.log("Bloki lekcji:", lessonBlocks);
+  const bsModal = bootstrap.Modal.getInstance(modal);
+  bsModal.hide();
 });
 
+
 // 🔹 Obsługa modala "Dodaj notatkę"
-document.getElementById("addNoteBtn").addEventListener("click", () => {
+document.getElementById("addNoteBtn").addEventListener("click", (e) => {
+  const modal = e.target.closest(".modal");
   const content = document.getElementById("noteContent").value.trim();
 
   if (!content) {
@@ -628,25 +637,30 @@ document.getElementById("addNoteBtn").addEventListener("click", () => {
     return;
   }
 
+  const selected = [...modal.querySelectorAll(".learning-type:checked")]
+    .map(cb => cb.value)
+    .join(",") || "0";
+
   const newBlock = {
     id: Date.now(),
     type: "note",
     content,
+    learning: selected,
   };
 
   lessonBlocks.push(newBlock);
   updateLessonPreview();
 
-  // reset i zamknięcie modala
   document.getElementById("noteContent").value = "";
-  const modal = bootstrap.Modal.getInstance(
-    document.getElementById("addNoteModal")
-  );
-  modal.hide();
+  modal.querySelectorAll(".learning-type:checked").forEach(cb => cb.checked = false);
+  const bsModal = bootstrap.Modal.getInstance(modal);
+  bsModal.hide();
 });
 
+
 // 🔹 Obsługa modala "Dodaj wskazówkę"
-document.getElementById("addTipBtn").addEventListener("click", () => {
+document.getElementById("addTipBtn").addEventListener("click", (e) => {
+  const modal = e.target.closest(".modal");
   const content = document.getElementById("tipContent").value.trim();
 
   if (!content) {
@@ -654,25 +668,30 @@ document.getElementById("addTipBtn").addEventListener("click", () => {
     return;
   }
 
+  const selected = [...modal.querySelectorAll(".learning-type:checked")]
+    .map(cb => cb.value)
+    .join(",") || "0";
+
   const newBlock = {
     id: Date.now(),
     type: "tip",
     content,
+    learning: selected,
   };
 
   lessonBlocks.push(newBlock);
   updateLessonPreview();
 
-  // reset i zamknięcie modala
   document.getElementById("tipContent").value = "";
-  const modal = bootstrap.Modal.getInstance(
-    document.getElementById("addTipModal")
-  );
-  modal.hide();
+  modal.querySelectorAll(".learning-type:checked").forEach(cb => cb.checked = false);
+  const bsModal = bootstrap.Modal.getInstance(modal);
+  bsModal.hide();
 });
 
+
 // 🔹 Obsługa modala "Dodaj pomysł"
-document.getElementById("addIdeaBtn").addEventListener("click", () => {
+document.getElementById("addIdeaBtn").addEventListener("click", (e) => {
+  const modal = e.target.closest(".modal");
   const content = document.getElementById("ideaContent").value.trim();
 
   if (!content) {
@@ -680,51 +699,29 @@ document.getElementById("addIdeaBtn").addEventListener("click", () => {
     return;
   }
 
+  const selected = [...modal.querySelectorAll(".learning-type:checked")]
+    .map(cb => cb.value)
+    .join(",") || "0";
+
   const newBlock = {
     id: Date.now(),
     type: "idea",
     content,
+    learning: selected,
   };
 
   lessonBlocks.push(newBlock);
   updateLessonPreview();
 
-  // czyszczenie i zamknięcie modala
   document.getElementById("ideaContent").value = "";
-  const modal = bootstrap.Modal.getInstance(
-    document.getElementById("addIdeaModal")
-  );
-  modal.hide();
-});
-
-// 🔹 Obsługa modala "Dodaj ostrzeżenie"
-document.getElementById("addWarningBtn").addEventListener("click", () => {
-  const content = document.getElementById("warningContent").value.trim();
-
-  if (!content) {
-    alert("Wpisz treść ostrzeżenia!");
-    return;
-  }
-
-  const newBlock = {
-    id: Date.now(),
-    type: "warning",
-    content,
-  };
-
-  lessonBlocks.push(newBlock);
-  updateLessonPreview();
-
-  // czyszczenie i zamknięcie modala
-  document.getElementById("warningContent").value = "";
-  const modal = bootstrap.Modal.getInstance(
-    document.getElementById("addWarningModal")
-  );
-  modal.hide();
+  modal.querySelectorAll(".learning-type:checked").forEach(cb => cb.checked = false);
+  const bsModal = bootstrap.Modal.getInstance(modal);
+  bsModal.hide();
 });
 
 // 🔹 Obsługa modala "Dodaj ciekawostkę"
-document.getElementById("addFactBtn").addEventListener("click", () => {
+document.getElementById("addFactBtn").addEventListener("click", (e) => {
+  const modal = e.target.closest(".modal");
   const content = document.getElementById("factContent").value.trim();
 
   if (!content) {
@@ -732,10 +729,16 @@ document.getElementById("addFactBtn").addEventListener("click", () => {
     return;
   }
 
+  // 🔹 Pobieramy zaznaczone typy uczniów
+  const selected = [...modal.querySelectorAll(".learning-type:checked")]
+    .map(cb => cb.value)
+    .join(",") || "0";
+
   const newBlock = {
     id: Date.now(),
     type: "fact",
     content,
+    learning: selected, // 🧠 dodane
   };
 
   lessonBlocks.push(newBlock);
@@ -743,17 +746,93 @@ document.getElementById("addFactBtn").addEventListener("click", () => {
 
   // czyszczenie i zamknięcie modala
   document.getElementById("factContent").value = "";
-  const modal = bootstrap.Modal.getInstance(
-    document.getElementById("addFactModal")
-  );
-  modal.hide();
+  modal.querySelectorAll(".learning-type:checked").forEach(cb => cb.checked = false);
+  const bsModal = bootstrap.Modal.getInstance(modal);
+  bsModal.hide();
 });
+
+
+// 🔹 Obsługa modala "Dodaj ostrzeżenie"
+document.getElementById("addWarningBtn").addEventListener("click", (e) => {
+  const modal = e.target.closest(".modal");
+  const content = document.getElementById("warningContent").value.trim();
+
+  if (!content) {
+    alert("Wpisz treść ostrzeżenia!");
+    return;
+  }
+
+  // 🔹 Pobieramy zaznaczone typy uczniów
+  const selected = [...modal.querySelectorAll(".learning-type:checked")]
+    .map(cb => cb.value)
+    .join(",") || "0";
+
+  const newBlock = {
+    id: Date.now(),
+    type: "warning",
+    content,
+    learning: selected, // 🧠 dodane
+  };
+
+  lessonBlocks.push(newBlock);
+  updateLessonPreview();
+
+  // czyszczenie i zamknięcie modala
+  document.getElementById("warningContent").value = "";
+  modal.querySelectorAll(".learning-type:checked").forEach(cb => cb.checked = false);
+  const bsModal = bootstrap.Modal.getInstance(modal);
+  bsModal.hide();
+});
+
+// 🔹 Obsługa modala "Dodaj blok kodu"
+document.getElementById("addCodeBtn").addEventListener("click", (e) => {
+  const modal = e.target.closest(".modal");
+  const title = document.getElementById("codeTitle").value.trim() || "Przykład kodu";
+  const language = document.getElementById("codeLanguage").value || "text";
+  const content = document.getElementById("codeContent").value.trim();
+
+  if (!content) {
+    alert("Wpisz lub wklej kod przed dodaniem!");
+    return;
+  }
+
+  // 🔹 Pobieramy zaznaczone typy uczniów
+  const selected = [...modal.querySelectorAll(".learning-type:checked")]
+    .map(cb => cb.value)
+    .join(",") || "0";
+
+  const newBlock = {
+    id: Date.now(),
+    type: "code",
+    title,
+    language,
+    code: content,
+    learning: selected, // 🧠 dodane
+  };
+
+  lessonBlocks.push(newBlock);
+  updateLessonPreview();
+
+  // czyszczenie pól i zamknięcie modala
+  document.getElementById("codeTitle").value = "";
+  document.getElementById("codeLanguage").selectedIndex = 0;
+  document.getElementById("codeContent").value = "";
+  modal.querySelectorAll(".learning-type:checked").forEach(cb => cb.checked = false);
+
+  const bsModal = bootstrap.Modal.getInstance(modal);
+  bsModal.hide();
+
+  console.log("Bloki lekcji:", lessonBlocks);
+});
+
+
 
 // globalna tablica tymczasowych plików audio
 const pendingAudioFiles = [];
 
-// 🔹 Dodawanie pliku audio (tylko pamięciowo)
-document.getElementById("addAudioBtn").addEventListener("click", () => {
+// 🔹 Dodawanie pliku audio (z typami uczniów)
+document.getElementById("addAudioBtn").addEventListener("click", (e) => {
+  const modal = e.target.closest(".modal");
   const fileInput = document.getElementById("audioFile");
   const file = fileInput.files[0];
 
@@ -768,13 +847,19 @@ document.getElementById("addAudioBtn").addEventListener("click", () => {
     return;
   }
 
+  // 🔹 Pobieramy zaznaczone typy uczniów
+  const selected = [...modal.querySelectorAll(".learning-type:checked")]
+    .map(cb => cb.value)
+    .join(",") || "0";
+
   const previewUrl = URL.createObjectURL(file);
   const newBlock = {
     id: Date.now(),
     type: "audio",
     src: previewUrl, // tylko podglądowo
     title: file.name,
-    tempFileIndex: pendingAudioFiles.length, // lokalny indeks
+    tempFileIndex: pendingAudioFiles.length,
+    learning: selected, // 🧠 dodane pole z typami uczniów
   };
 
   // dodajemy do tablicy bloków i tymczasowych plików
@@ -786,10 +871,11 @@ document.getElementById("addAudioBtn").addEventListener("click", () => {
   // reset i zamknięcie modala
   fileInput.value = "";
   document.getElementById("audioPreview").classList.add("d-none");
-  const modal = bootstrap.Modal.getInstance(
-    document.getElementById("addAudioModal")
-  );
-  modal.hide();
+  modal.querySelectorAll(".learning-type:checked").forEach(cb => cb.checked = false);
+  const bsModal = bootstrap.Modal.getInstance(modal);
+  bsModal.hide();
+
+  console.log("Bloki lekcji:", lessonBlocks);
 });
 
 
