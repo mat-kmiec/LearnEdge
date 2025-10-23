@@ -38,56 +38,7 @@
     />
   </head>
   <body>
-    <nav class="navbar navbar-expand-lg fixed-top bg-white shadow">
-      <div class="container">
-        <a class="navbar-brand d-flex align-items-center" href="#">
-          <img
-            th:src="@{/img/logo-icon.png}"
-            src="../../static/img/logo-icon.png"
-            alt="Logo"
-            width="40"
-            height="40"
-            class="me-2"
-          />
-          <span class="brand-gradient">LearnEdge</span>
-        </a>
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarNav"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div
-          class="collapse navbar-collapse text-center justify-content-end"
-          id="navbarNav"
-        >
-          <ul class="navbar-nav align-items-lg-center gap-lg-3">
-            <li class="nav-item">
-              <a class="nav-link" href="#section1">moje kursy</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="profile.html" th:href="@{/profil}"
-                >moje konto</a
-              >
-            </li>
-
-            <li class="nav-item d-lg-none mt-2">
-              <a th:href="@{/logout}" href="#" class="btn btn-gradient w-100"
-                >wyloguj</a
-              >
-            </li>
-          </ul>
-        </div>
-        <a
-          th:href="@{/logout}"
-          href="#login"
-          class="btn btn-gradient ms-lg-3 d-none d-lg-inline-block"
-          >wyloguj</a
-        >
-      </div>
-    </nav>
+  <nav th:replace="~{fragments/nav :: navbar}"></nav>
 
     <div class="container py-5">
       <div class="dashboard-container">

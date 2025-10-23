@@ -9,15 +9,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 @RequiredArgsConstructor
-public class LessonController {
+public class ProfileController {
 
-    @GetMapping("/lekcja")
-    public String lesson() {
-        return "course/lesson";
-    }
-
-    @GetMapping("/kreator-lekcji")
-    public String lessonCreator() {
-        return "course/create-lesson";
+    @GetMapping("/profil")
+    public String profile() {
+        return "dashboard/profile";
     }
 }
