@@ -5,12 +5,14 @@ import org.springframework.stereotype.Service;
 import pl.learnedge.dto.CourseDto;
 import pl.learnedge.mapper.CourseMapper;
 import pl.learnedge.repository.CourseRepository;
+import pl.learnedge.repository.UserCourseRepository;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class CourseService {
+    private final UserCourseRepository userCourseRepository;
     private final CourseRepository courseRepository;
     private final CourseMapper courseMapper;
 
@@ -22,7 +24,7 @@ public class CourseService {
    }
 
    public List<CourseDto> getEnrolledCoursesForUser(Long userId){
-        return courseRepository.findAllCoursesEnrolledByUser(userId)
+        return userCourseRepository.findAllByUserId(userId)
                 .stream()
                 .map(courseMapper::toDto)
                 .toList();

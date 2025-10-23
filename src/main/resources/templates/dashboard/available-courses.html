@@ -29,7 +29,7 @@
 
 <body>
 <!-- Navbar -->
-<nav th:replace="fragments/nav :: navbar"></nav>
+<nav th:replace="~{fragments/nav :: navbar}"></nav>
 
 <!-- Content -->
 <div class="container py-5">
@@ -45,16 +45,16 @@
               <span>Widzisz kursy dopasowane do stylu: <strong>Wzrokowiec</strong></span>
             </div> -->
 
-            <p class="text-light opacity-75 small mt-3 mb-0">
-                Możesz zobaczyć również inne kursy —
-                <a
-                        th:href="@{/wszystkie-kursy}"
-                        href="all-courses.html"
-                        class="fw-semibold text-decoration-none"
-                        style="color: var(--color-accent)"
-                >Zobacz wszystkie</a
-                >.
-            </p>
+<!--            <p class="text-light opacity-75 small mt-3 mb-0">-->
+<!--                Możesz zobaczyć również inne kursy —-->
+<!--                <a-->
+<!--                        th:href="@{/wszystkie-kursy}"-->
+<!--                        href="all-courses.html"-->
+<!--                        class="fw-semibold text-decoration-none"-->
+<!--                        style="color: var(&#45;&#45;color-accent)"-->
+<!--                >Zobacz wszystkie</a-->
+<!--                >.-->
+<!--            </p>-->
         </div>
 
         <!-- Kursy -->
@@ -77,14 +77,24 @@
                     </div>
                 </div>
             </div>
+            <div class="col-12" th:if="${#lists.isEmpty(courses)}">
+
+                <div class="alert text-center p-4 text-light">
+                    <i class="bi bi-emoji-smile text-light fs-2 d-block mb-2"></i>
+                    <h5 class="mb-2">Jesteś zapisany na wszystkie nasze kursy.</h5>
+                    <p class="mb-3">Przejdź do katalogu twoich kursów i kontynuj nauke!</p>
+                    <a th:href="@{/panel}" class="btn btn-gradient">
+                        Moje kursy
+                    </a>
+                </div>
+            </div>
 
 
             <!-- Info na dole -->
             <div class="text-center mt-5 opacity-75">
                 <p class="small mb-0">
-                    Wyświetlono kursy dopasowane do stylu uczenia się
-                    <strong>wzrokowiec</strong>.
-                    Wkrótce pojawią się nowe propozycje dla Twojego profilu.
+                    W tej sekcji znajdziesz wszystkie dostępne kursy oferowane przez naszą platformę edukacyjną.
+                    Regularnie dodajemy nowe materiały, więc zaglądaj tu częściej!
                 </p>
             </div>
         </div>

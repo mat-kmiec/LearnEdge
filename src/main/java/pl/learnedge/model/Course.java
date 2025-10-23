@@ -30,6 +30,9 @@ public class Course {
     @Column(length = 30)
     private String difficulty;
 
+    @Column(nullable = false, unique = true)
+    private String slug;
+
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Lesson> lessons = new ArrayList<>();
 

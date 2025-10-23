@@ -5,6 +5,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import pl.learnedge.dto.CourseDto;
 import pl.learnedge.model.Course;
 import pl.learnedge.model.User;
@@ -28,7 +29,7 @@ public class CourseController {
 
     @GetMapping("/panel")
     public String panel(Model model) {
-        return loadCourses(model, courseService::getAvailableCoursesForUser, "dashboard/dashboard");
+        return loadCourses(model, courseService::getEnrolledCoursesForUser, "dashboard/dashboard");
     }
 
     private String loadCourses(Model model,
@@ -38,7 +39,12 @@ public class CourseController {
         List<CourseDto> courses = serviceMethod.apply(userId);
         model.addAttribute("courses", courses);
         return viewName;
+    }
 
+    @GetMapping("/kurs/{slug}")
+    public String course(@PathVariable String slug, Model model){
+
+        return "course/course";
     }
 
 

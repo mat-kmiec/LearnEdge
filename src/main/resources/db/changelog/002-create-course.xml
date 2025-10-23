@@ -19,6 +19,9 @@
             <column name="difficulty" type="VARCHAR(30)">
                 <constraints nullable="false"/>
             </column>
+            <column name="slug" type="VARCHAR(255)">
+                <constraints nullable="false" />
+            </column>
         </createTable>
     </changeSet>
 
@@ -28,6 +31,7 @@
             <column name="name" value="Podstawy Javy"/>
             <column name="description" value="Wprowadzenie do języka Java, składni, zmiennych, pętli i klas."/>
             <column name="difficulty" value="początkujący"/>
+            <column name="slug" value="podstawy-java" />
         </insert>
     </changeSet>
 </databaseChangeLog>

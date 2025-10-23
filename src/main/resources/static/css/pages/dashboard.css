@@ -124,6 +124,10 @@ body {
     box-shadow: 0 4px 15px rgba(0, 184, 230, 0.45);
 }
 
+.font-color{
+    color: var(--color-accent);
+}
+
 .btn-gradient:active {
     transform: translateY(0);
     box-shadow: 0 0 8px rgba(0, 184, 230, 0.35);

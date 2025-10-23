@@ -32,7 +32,7 @@
     />
   </head>
   <body>
-    <nav th:replace="fragments/nav :: navbar"></nav>
+    <nav th:replace="~{fragments/nav :: navbar}"></nav>
 
     <div class="container py-5">
       <div class="dashboard-container">
@@ -55,69 +55,35 @@
         </div>
 
         <div class="row g-4">
-          <!-- Kurs 1 – Słuchowiec -->
-          <div class="col-md-6 col-lg-4">
+          <div class="col-md-6 col-lg-4" th:each="course : ${courses}">
             <div class="course-card h-100 position-relative">
-              <h5 class="fw-bold mb-2 d-flex align-items-center mt-3">
-                <i class="bi bi-code-slash me-2"></i> Programowanie w Javie
+              <h5 class="fw-bold mb-2 d-flex align-items-center mt-3" th:text="${course.name}">
+                 Programowanie w Javie
               </h5>
-              <p class="small text-light mb-3">
+              <p class="small text-light mb-3" th:text="${course.description}">
                 Zrozum podstawy Javy i naucz się budować aplikacje krok po
                 kroku.
               </p>
               <div class="progress mb-3">
-                <div class="progress-bar" style="width: 65%"></div>
+                <div class="progress-bar" th:style="'width:' + ${course.progress} + '%'"></div>
               </div>
               <div class="d-flex justify-content-between align-items-center">
-                <span class="small">65% ukończono</span>
-                <button class="btn btn-sm btn-gradient">Kontynuuj</button>
+                <span class="small" th:text="${course.progress} + '% ukończono'">65% ukończono</span>
+                <a class="btn btn-sm btn-gradient" th:href="@{/kurs/{slug}(slug=${course.slug})}">Kontynuuj</a>
               </div>
             </div>
           </div>
+            <div class="col-12" th:if="${#lists.isEmpty(courses)}">
 
-          <!-- Kurs 2 – Wzrokowiec -->
-          <div class="col-md-6 col-lg-4">
-            <div class="course-card h-100 position-relative">
-
-              <h5 class="fw-bold mb-2 d-flex align-items-center mt-3">
-                <i class="bi bi-palette me-2"></i> UX Design dla wzrokowców
-              </h5>
-              <p class="small text-light mb-3">
-                Dowiedz się, jak projektować interfejsy, które przyciągają
-                wzrok.
-              </p>
-              <div class="progress mb-3">
-                <div class="progress-bar" style="width: 30%"></div>
-              </div>
-              <div class="d-flex justify-content-between align-items-center">
-                <span class="small">30% ukończono</span>
-                <button class="btn btn-sm btn-gradient">Kontynuuj</button>
-              </div>
+                <div class="alert text-center p-4 text-light">
+                    <i class="bi bi-emoji-frown text-light fs-2 d-block mb-2"></i>
+                    <h5 class="mb-2">Nie jesteś zapisany na żaden kurs.</h5>
+                    <p class="mb-3">Przejdź do katalogu kursów i rozpocznij swoją naukę!</p>
+                    <a th:href="@{/dostepne-kursy}" class="btn btn-gradient">
+                        Zapisz się na kurs
+                    </a>
+                </div>
             </div>
-          </div>
-
-          <!-- Kurs 3 – Kinestetyk -->
-          <div class="col-md-6 col-lg-4">
-            <div class="course-card h-100 position-relative">
-              <h5 class="fw-bold mb-2 d-flex align-items-center mt-3">
-                <i class="bi bi-lightning-charge me-2"></i> Efektywne uczenie
-                się
-              </h5>
-              <p class="small text-light mb-3">
-                Poznaj techniki dopasowane do Twojego stylu nauki – słuchowiec,
-                wzrokowiec lub kinestetyk.
-              </p>
-              <div class="progress mb-3">
-                <div class="progress-bar" style="width: 90%"></div>
-              </div>
-              <div class="d-flex justify-content-between align-items-center">
-                <span class="small">90% ukończono</span>
-                <button class="btn btn-sm btn-gradient">Powtórz</button>
-              </div>
-            </div>
-          </div>
-
-    
         </div>
       </div>
     </div>
