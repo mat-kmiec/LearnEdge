@@ -12,6 +12,7 @@ import pl.learnedge.service.AuthService;
 import pl.learnedge.service.CourseService;
 
 import java.util.List;
+import java.util.function.Function;
 
 @Controller
 @AllArgsConstructor
@@ -21,11 +22,23 @@ public class CourseController {
     private final AuthService authService;
 
     @GetMapping("/dostepne-kursy")
-    public String course(Model model, @AuthenticationPrincipal User user) {
+    public String course(Model model) {
+        return loadCourses(model, courseService::getAvailableCoursesForUser, "dashboard/available-courses");
+    }
+
+    @GetMapping("/panel")
+    public String panel(Model model) {
+        return loadCourses(model, courseService::getAvailableCoursesForUser, "dashboard/dashboard");
+    }
+
+    private String loadCourses(Model model,
+                               Function<Long, List<CourseDto>> serviceMethod,
+                               String viewName) {
         long userId = authService.getCurrentUserId();
-        List<CourseDto> courses = courseService.getAvailableCoursesForUser(userId);
+        List<CourseDto> courses = serviceMethod.apply(userId);
         model.addAttribute("courses", courses);
-        return "dashboard/available-courses";
+        return viewName;
+
     }
 
 

@@ -21,6 +21,13 @@ public class CourseService {
                 .toList();
    }
 
+   public List<CourseDto> getEnrolledCoursesForUser(Long userId){
+        return courseRepository.findAllCoursesEnrolledByUser(userId)
+                .stream()
+                .map(courseMapper::toDto)
+                .toList();
+    }
+
 
 
 
