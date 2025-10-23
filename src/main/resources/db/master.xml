@@ -2,9 +2,12 @@
 <databaseChangeLog
         xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
-        https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.11.xsd">
+        xsi:schemaLocation="
+           http://www.liquibase.org/xml/ns/dbchangelog
+           http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.23.xsd">
 
-    <include file="db/changelog/001-create-users.xml" relativeToChangelogFile="false"/>
-    <include file="db/changelog/002-create-course.xml" relativeToChangelogFile="false"/>
+    <include file="changelog/001-create-users.xml" relativeToChangelogFile="true"/>
+    <include file="changelog/002-create-course.xml" relativeToChangelogFile="true"/>
+    <include file="changelog/003-create-password-reset-token.xml" relativeToChangelogFile="true"/>
+
 </databaseChangeLog>
