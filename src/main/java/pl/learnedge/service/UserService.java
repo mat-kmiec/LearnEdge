@@ -4,8 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import pl.learnedge.dto.UpdateProfileDto;
 import pl.learnedge.exception.EmailAlreadyTakenException;
 import pl.learnedge.exception.UserAlreadyExistException;
+import pl.learnedge.exception.UserNotFoundException;
 import pl.learnedge.model.PasswordResetToken;
 import pl.learnedge.model.User;
 import pl.learnedge.repository.PasswordResetTokenRepository;
@@ -84,5 +86,16 @@ public class UserService {
                     return true;
                 })
                 .orElse(false);
+    }
+
+    @Transactional
+    public User updateProfile(Long userId, UpdateProfileDto profileDto) {
+        User user = users.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("Użytkownik nie został znaleziony."));
+
+        user.setFirstName(profileDto.getFirstName());
+        user.setLastName(profileDto.getLastName());
+
+        return users.save(user);
     }
 }

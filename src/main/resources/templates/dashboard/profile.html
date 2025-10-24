@@ -3,6 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
     <title>LearnEdge – Mój profil</title>
 
     <!-- Bootstrap -->
@@ -41,17 +43,23 @@
         </div>
 
         <div class="row g-4">
-          <!-- Avatar + dane -->
+          <!-- Dane użytkownika -->
           <div class="col-lg-4 text-center">
             <div class="profile-card h-100 d-flex flex-column align-items-center justify-content-center">
               <img
-                src="https://cdn-icons-png.flaticon.com/512/149/149071.png"
+                th:src="${#authentication.principal.profilePicture != null ? #authentication.principal.profilePicture : 'https://cdn-icons-png.flaticon.com/512/149/149071.png'}"
                 alt="Avatar"
                 class="profile-avatar mb-3"
+                id="profileImage"
               />
-              <h4 class="fw-bold">Jan Kowalski</h4>
-              <p class="text-light small mb-3">jan.kowalski@example.com</p>
-              <button class="btn btn-gradient btn-sm w-100 mt-2">
+              <h4 class="fw-bold" th:text="${#authentication.principal.firstName + ' ' + #authentication.principal.lastName}">Jan Kowalski</h4>
+              <p class="text-light small mb-3" th:text="${#authentication.principal.email}">jan.kowalski@example.com</p>
+              <input type="file" 
+                     id="profilePictureInput" 
+                     accept="image/*" 
+                     style="display: none;"
+                     onchange="handleProfilePictureChange(this)">
+              <button class="btn btn-gradient btn-sm w-100" onclick="document.getElementById('profilePictureInput').click()">
                 <i class="bi bi-camera me-2"></i> Zmień zdjęcie
               </button>
             </div>
@@ -63,7 +71,15 @@
               <div class="profile-section-title">
                 <i class="bi bi-person-circle"></i> Dane użytkownika
               </div>
-              <form>
+              <div th:if="${success}" class="alert alert-success mb-3" role="alert">
+                <i class="bi bi-check-circle me-2"></i>
+                <span th:text="${success}">Profil został zaktualizowany.</span>
+              </div>
+              <div th:if="${error}" class="alert alert-danger mb-3" role="alert">
+                <i class="bi bi-exclamation-triangle me-2"></i>
+                <span th:text="${error}">Wystąpił błąd podczas aktualizacji profilu.</span>
+              </div>
+              <form th:action="@{/profil}" method="post" th:object="${profile}">
                 <div class="row">
                   <div class="col-md-6 mb-3">
                     <label for="firstName">Imię</label>
@@ -71,7 +87,7 @@
                       type="text"
                       class="form-control"
                       id="firstName"
-                      value="Jan"
+                      th:field="*{firstName}"
                     />
                   </div>
                   <div class="col-md-6 mb-3">
@@ -80,16 +96,7 @@
                       type="text"
                       class="form-control"
                       id="lastName"
-                      value="Kowalski"
-                    />
-                  </div>
-                  <div class="col-md-12 mb-3">
-                    <label for="email">Adres e-mail</label>
-                    <input
-                      type="email"
-                      class="form-control"
-                      id="email"
-                      value="jan.kowalski@example.com"
+                      th:field="*{lastName}"
                     />
                   </div>
                 </div>
@@ -105,6 +112,21 @@
     <div class="profile-section-title">
       <i class="bi bi-lightbulb"></i> Styl uczenia się
     </div>
+    
+    <!-- Success alert (hidden by default) -->
+    <div id="learningStyleSuccess" class="alert alert-success alert-dismissible fade" role="alert" style="display: none;">
+      <i class="bi bi-check-circle me-2"></i>
+      <span id="learningStyleSuccessMessage">Styl uczenia się został zapisany!</span>
+      <button type="button" class="btn-close" onclick="document.getElementById('learningStyleSuccess').style.display='none'"></button>
+    </div>
+    
+    <!-- Error alert (hidden by default) -->
+    <div id="learningStyleError" class="alert alert-danger alert-dismissible fade" role="alert" style="display: none;">
+      <i class="bi bi-exclamation-triangle me-2"></i>
+      <span id="learningStyleErrorMessage"></span>
+      <button type="button" class="btn-close" onclick="document.getElementById('learningStyleError').style.display='none'"></button>
+    </div>
+    
     <p class="text-light small mb-4">
       Wybierz swój styl uczenia się ręcznie lub pozwól naszemu botowi AI
       pomóc Ci go określić na podstawie krótkiej ankiety.
@@ -126,7 +148,7 @@
 
       <!-- Przyciski -->
       <div class="d-flex flex-column flex-fill flex-md-row gap-2 mt-2 mt-md-4">
-        <button class="btn btn-gradient flex-fill">
+        <button class="btn btn-gradient flex-fill" onclick="saveLearningStyle(); return false;">
           <i class="bi bi-save me-2"></i> Zapisz styl
         </button>
         <a
@@ -140,10 +162,10 @@
     </div>
 
     <!-- Aktualny styl użytkownika -->
-    <div class="mt-4 d-flex align-items-center gap-3">
+    <div class="mt-4 d-flex align-items-center gap-3" id="currentLearningStyleDisplay">
       <i class="bi bi-person-check text-accent fs-4"></i>
       <p class="mb-0 text-light small">
-        Twój aktualny styl uczenia: <strong class="text-accent">Wzrokowiec</strong>
+        Twój aktualny styl uczenia: <strong class="text-accent" id="currentLearningStyleText" th:text="${#authentication.principal.learningStyle != null ? (#authentication.principal.learningStyle == 'VISUAL' ? '👁️ Wzrokowiec' : (#authentication.principal.learningStyle == 'AUDITORY' ? '🎧 Słuchowiec' : '✋ Kinestetyk')) : 'Nie ustawiono'}">Nie ustawiono</strong>
       </p>
     </div>
   </div>
@@ -156,33 +178,60 @@
               <div class="profile-section-title">
                 <i class="bi bi-shield-lock"></i> Zmiana hasła
               </div>
-              <form class="row">
+              <!-- Alerts for change password -->
+              <div id="changePasswordSuccess" class="alert alert-success alert-dismissible fade" role="alert" style="display: none;">
+                <i class="bi bi-check-circle me-2"></i>
+                <span id="changePasswordSuccessMessage">Hasło zostało zmienione.</span>
+                <button type="button" class="btn-close" onclick="document.getElementById('changePasswordSuccess').style.display='none'"></button>
+              </div>
+              <div id="changePasswordError" class="alert alert-danger alert-dismissible fade" role="alert" style="display: none;">
+                <i class="bi bi-exclamation-triangle me-2"></i>
+                <span id="changePasswordErrorMessage"></span>
+                <button type="button" class="btn-close" onclick="document.getElementById('changePasswordError').style.display='none'"></button>
+              </div>
+
+              <form class="row" id="changePasswordForm" onsubmit="return changePassword(event)">
                 <div class="col-md-4 mb-3">
                   <label for="currentPassword">Obecne hasło</label>
-                  <input
-                    type="password"
-                    class="form-control"
-                    id="currentPassword"
-                    placeholder="••••••••"
-                  />
+                  <div class="input-group">
+                    <input
+                      type="password"
+                      class="form-control"
+                      id="currentPassword"
+                      placeholder="••••••••"
+                    />
+                    <button class="btn btn-outline-secondary" type="button" onclick="togglePasswordVisibility('currentPassword')">
+                      <i class="bi bi-eye" id="currentPassword-icon"></i>
+                    </button>
+                  </div>
                 </div>
                 <div class="col-md-4 mb-3">
                   <label for="newPassword">Nowe hasło</label>
-                  <input
-                    type="password"
-                    class="form-control"
-                    id="newPassword"
-                    placeholder="Nowe hasło"
-                  />
+                  <div class="input-group">
+                    <input
+                      type="password"
+                      class="form-control"
+                      id="newPassword"
+                      placeholder="Nowe hasło"
+                    />
+                    <button class="btn btn-outline-secondary" type="button" onclick="togglePasswordVisibility('newPassword')">
+                      <i class="bi bi-eye" id="newPassword-icon"></i>
+                    </button>
+                  </div>
                 </div>
                 <div class="col-md-4 mb-3">
                   <label for="confirmPassword">Powtórz hasło</label>
-                  <input
-                    type="password"
-                    class="form-control"
-                    id="confirmPassword"
-                    placeholder="Powtórz nowe hasło"
-                  />
+                  <div class="input-group">
+                    <input
+                      type="password"
+                      class="form-control"
+                      id="confirmPassword"
+                      placeholder="Powtórz nowe hasło"
+                    />
+                    <button class="btn btn-outline-secondary" type="button" onclick="togglePasswordVisibility('confirmPassword')">
+                      <i class="bi bi-eye" id="confirmPassword-icon"></i>
+                    </button>
+                  </div>
                 </div>
                 <div class="col-12">
                   <button type="submit" class="btn btn-gradient w-100 mt-2">
@@ -205,5 +254,255 @@
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    
+  <script>
+  function handleProfilePictureChange(input) {
+        if (input.files && input.files[0]) {
+            const file = input.files[0];
+      console.log('Selected file:', file?.name, file?.type, file?.size);
+            
+            // Check file size (max 5MB)
+            if (file.size > 5 * 1024 * 1024) {
+                alert('Plik jest zbyt duży. Maksymalny rozmiar to 5MB.');
+                return;
+            }
+            
+            // Check file type
+            if (!file.type.startsWith('image/')) {
+                alert('Proszę wybrać plik graficzny.');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('profilePicture', file);
+
+      // CSRF
+      const tokenEl = document.querySelector('meta[name="_csrf"]');
+      const headerEl = document.querySelector('meta[name="_csrf_header"]');
+      const csrfToken = tokenEl ? tokenEl.getAttribute('content') : null;
+      const csrfHeader = headerEl ? headerEl.getAttribute('content') : null;
+
+      const headers = {};
+      if (csrfToken && csrfHeader) {
+        headers[csrfHeader] = csrfToken;
+      } else {
+        console.warn('CSRF meta tags not found');
+      }
+
+      fetch('/api/profile/picture', {
+                method: 'POST',
+        body: formData,
+        credentials: 'same-origin',
+        headers
+            })
+            .then(response => {
+        console.log('Upload response status:', response.status);
+        return response.text().then(text => {
+          let data;
+          try { data = text ? JSON.parse(text) : {}; } catch(e) { data = { error: text || 'Nieznany błąd' }; }
+          if (!response.ok) {
+            const msg = (data && (data.error || data.message)) || 'Błąd podczas przesyłania zdjęcia';
+            throw new Error(msg);
+          }
+          return data;
+        });
+            })
+      .then(data => {
+        // Update the image preview
+        if (data && data.url) {
+          const urlWithBuster = data.url + (data.url.includes('?') ? '&' : '?') + 't=' + Date.now();
+          console.log('Setting new profile image URL:', urlWithBuster);
+          document.getElementById('profileImage').src = urlWithBuster;
+        } else {
+          console.warn('No URL returned from server', data);
+        }
+            })
+            .catch(error => {
+        console.error('Upload error:', error);
+        alert('Wystąpił błąd podczas przesyłania zdjęcia: ' + (error?.message || 'Spróbuj ponownie.'));
+            });
+        }
+    }
+
+    function togglePasswordVisibility(fieldId) {
+        const input = document.getElementById(fieldId);
+        const icon = document.getElementById(fieldId + '-icon');
+        
+        if (input.type === 'password') {
+            input.type = 'text';
+            icon.classList.remove('bi-eye');
+            icon.classList.add('bi-eye-slash');
+        } else {
+            input.type = 'password';
+            icon.classList.remove('bi-eye-slash');
+            icon.classList.add('bi-eye');
+        }
+    }
+
+    function saveLearningStyle() {
+        const select = document.getElementById('learningStyle');
+        const learningStyle = select.value;
+        
+        // Hide any previous alerts
+        document.getElementById('learningStyleSuccess').style.display = 'none';
+        document.getElementById('learningStyleError').style.display = 'none';
+        
+        if (!learningStyle || learningStyle === '-- wybierz styl --') {
+            showLearningStyleError('Proszę wybrać styl uczenia się');
+            return;
+        }
+
+        // Get CSRF token
+        const tokenEl = document.querySelector('meta[name="_csrf"]');
+        const headerEl = document.querySelector('meta[name="_csrf_header"]');
+        const csrfToken = tokenEl ? tokenEl.getAttribute('content') : null;
+        const csrfHeader = headerEl ? headerEl.getAttribute('content') : null;
+
+        const headers = {
+            'Content-Type': 'application/json'
+        };
+        if (csrfToken && csrfHeader) {
+            headers[csrfHeader] = csrfToken;
+        }
+
+        fetch('/api/profile/learning-style', {
+            method: 'POST',
+            headers: headers,
+            body: JSON.stringify({ learningStyle: learningStyle }),
+            credentials: 'same-origin'
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                showLearningStyleError('Błąd: ' + data.error);
+            } else {
+                // Update display
+                const styleNames = {
+                    'VISUAL': '👁️ Wzrokowiec',
+                    'AUDITORY': '🎧 Słuchowiec',
+                    'KINESTHETIC': '✋ Kinestetyk'
+                };
+                document.getElementById('currentLearningStyleText').textContent = styleNames[learningStyle];
+                showLearningStyleSuccess('Styl uczenia się został zapisany!');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showLearningStyleError('Wystąpił błąd podczas zapisywania stylu uczenia się');
+        });
+    }
+
+    function showLearningStyleSuccess(message) {
+        const alert = document.getElementById('learningStyleSuccess');
+        document.getElementById('learningStyleSuccessMessage').textContent = message;
+        alert.style.display = 'block';
+        alert.classList.add('show');
+        
+        // Scroll to alert
+        alert.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        
+        // Auto-hide after 5 seconds
+        setTimeout(() => {
+            alert.classList.remove('show');
+            setTimeout(() => alert.style.display = 'none', 150);
+        }, 5000);
+    }
+
+    function showLearningStyleError(message) {
+        const alert = document.getElementById('learningStyleError');
+        document.getElementById('learningStyleErrorMessage').textContent = message;
+        alert.style.display = 'block';
+        alert.classList.add('show');
+        
+        // Scroll to alert
+        alert.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+  function showChangePasswordSuccess(message) {
+    const alert = document.getElementById('changePasswordSuccess');
+    document.getElementById('changePasswordSuccessMessage').textContent = message || 'Hasło zostało zmienione.';
+    alert.style.display = 'block';
+    alert.classList.add('show');
+    alert.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    setTimeout(() => {
+      alert.classList.remove('show');
+      setTimeout(() => alert.style.display = 'none', 150);
+    }, 5000);
+  }
+
+  function showChangePasswordError(message) {
+    const alert = document.getElementById('changePasswordError');
+    document.getElementById('changePasswordErrorMessage').textContent = message || 'Nie udało się zmienić hasła';
+    alert.style.display = 'block';
+    alert.classList.add('show');
+    alert.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  function changePassword(event) {
+    if (event) event.preventDefault();
+
+    // Hide previous alerts
+    document.getElementById('changePasswordSuccess').style.display = 'none';
+    document.getElementById('changePasswordError').style.display = 'none';
+
+    const currentPassword = document.getElementById('currentPassword').value;
+    const newPassword = document.getElementById('newPassword').value;
+    const confirmPassword = document.getElementById('confirmPassword').value;
+
+    if (!currentPassword || !newPassword || !confirmPassword) {
+      showChangePasswordError('Wszystkie pola są wymagane');
+      return false;
+    }
+    if (newPassword.length < 8) {
+      showChangePasswordError('Nowe hasło musi mieć co najmniej 8 znaków');
+      return false;
+    }
+    if (newPassword !== confirmPassword) {
+      showChangePasswordError('Hasła nie są takie same');
+      return false;
+    }
+    if (newPassword === currentPassword) {
+      showChangePasswordError('Nowe hasło nie może być takie samo jak obecne');
+      return false;
+    }
+
+    // CSRF
+    const tokenEl = document.querySelector('meta[name="_csrf"]');
+    const headerEl = document.querySelector('meta[name="_csrf_header"]');
+    const csrfToken = tokenEl ? tokenEl.getAttribute('content') : null;
+    const csrfHeader = headerEl ? headerEl.getAttribute('content') : null;
+
+    const headers = { 'Content-Type': 'application/json' };
+    if (csrfToken && csrfHeader) headers[csrfHeader] = csrfToken;
+
+    fetch('/api/profile/change-password', {
+      method: 'POST',
+      headers,
+      credentials: 'same-origin',
+      body: JSON.stringify({ currentPassword, newPassword })
+    })
+    .then(resp => resp.text().then(text => {
+      let data; try { data = text ? JSON.parse(text) : {}; } catch(e) { data = { error: text || 'Błąd' }; }
+      return { ok: resp.ok, data };
+    }))
+    .then(({ ok, data }) => {
+      if (!ok || data.error) {
+        showChangePasswordError(data.error || 'Wystąpił błąd podczas zmiany hasła');
+      } else {
+        showChangePasswordSuccess('Hasło zostało zmienione.');
+        // Clear inputs
+        document.getElementById('currentPassword').value = '';
+        document.getElementById('newPassword').value = '';
+        document.getElementById('confirmPassword').value = '';
+      }
+    })
+    .catch(err => {
+      console.error('Change password error:', err);
+      showChangePasswordError('Wystąpił błąd podczas zmiany hasła');
+    });
+
+    return false;
+  }
+    </script>
   </body>
 </html>

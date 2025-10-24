@@ -50,13 +50,12 @@ public class SecurityConfig {
                         "/", "/logowanie", "/rejestracja", "/error",
                         "/przypomnij-haslo", "/reset-hasla", "/reset-hasla/**",
                         "/oauth2/**", "/h2-console/**",
-                        "/css/**", "/js/**", "/img/**", "/webjars/**"
+                        "/css/**", "/js/**", "/img/**", "/webjars/**",
+                        "/uploads/**"  // Public profile pictures like YouTube/Instagram
                 ).permitAll()
                 .requestMatchers(HttpMethod.POST, "/rejestracja", "/przypomnij-haslo", "/reset-hasla").permitAll()
                 .anyRequest().authenticated()
-            )
-
-            // ✅ Dla H2
+            )            // ✅ Dla H2
             .headers(headers -> headers.frameOptions(frame -> frame.sameOrigin()))
 
             // ✅ Logowanie formularzem

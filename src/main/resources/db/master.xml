@@ -11,4 +11,8 @@
     <include file="changelog/003-create-password-reset-token.xml" relativeToChangelogFile="true"/>
     <include file="changelog/004-create-lessons.xml" relativeToChangelogFile="true"/>
     <include file="changelog/005-create-user-course.xml" relativeToChangelogFile="true"/>
+    <include file="changelog/006-add-name-fields.xml" relativeToChangelogFile="true"/>
+    <include file="changelog/007-update-test-user.xml" relativeToChangelogFile="true"/>
+    <include file="changelog/007-add-profile-picture.xml" relativeToChangelogFile="true"/>
+    <include file="changelog/008-add-learning-style.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>

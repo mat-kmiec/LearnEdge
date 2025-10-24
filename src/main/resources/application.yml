@@ -16,7 +16,6 @@ spring:
   liquibase:
     change-log: classpath:db/master.xml
     contexts: dev
-
   security:
     oauth2:
       client:
@@ -31,9 +30,17 @@ spring:
             client-secret: ${GITHUB_CLIENT_SECRET}
             scope: [read:user, user:email]
             redirect-uri: "{baseUrl}/login/oauth2/code/github"
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 5MB
 
 logging:
   level:
     org.springframework.security: warn
     web: warn
     liquibase: info
+
+app:
+  upload:
+    dir: uploads/profile-pictures
