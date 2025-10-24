@@ -45,12 +45,13 @@ public class SecurityConfig {
             )
 
             // ✅ Uprawnienia
-            .authorizeHttpRequests(auth -> auth
+        .authorizeHttpRequests(auth -> auth
                 .requestMatchers(
                         "/", "/logowanie", "/rejestracja", "/error",
                         "/przypomnij-haslo", "/reset-hasla", "/reset-hasla/**",
-                        "/oauth2/**", "/h2-console/**",
-                        "/css/**", "/js/**", "/img/**", "/webjars/**"
+            "/oauth2/**", "/h2-console/**",
+            "/css/**", "/js/**", "/img/**", "/webjars/**", 
+            "/uploads/**"
                 ).permitAll()
                 .requestMatchers(HttpMethod.POST, "/rejestracja", "/przypomnij-haslo", "/reset-hasla").permitAll()
                 .anyRequest().authenticated()

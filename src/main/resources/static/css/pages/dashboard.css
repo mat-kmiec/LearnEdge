@@ -100,6 +100,7 @@ body {
 
 .brand-gradient {
     background: linear-gradient(90deg, #00b8e6, #04d1b7);
+  background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     font-size: 1.75rem;
@@ -159,6 +160,7 @@ body {
       font-weight: 700;
       letter-spacing: 1px;
       background: linear-gradient(90deg, #00b8e6, #04d1b7);
+      background-clip: text;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
@@ -315,6 +317,7 @@ body {
       .profile-card h5 {
         font-weight: 600;
         background: linear-gradient(90deg, #00b8e6, #04d1b7);
+        background-clip: text;
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
       }
@@ -342,11 +345,16 @@ body {
       .profile-avatar {
         width: 120px;
         height: 120px;
-        border-radius: 50%;
+        aspect-ratio: 1 / 1;              /* always a square area */
+        border-radius: 50%;               /* make it round */
         border: 3px solid var(--color-accent);
-        object-fit: cover;
+        object-fit: cover;                /* crop image to fill the circle */
+        object-position: center;          /* center the crop */
+        clip-path: circle(50% at 50% 50%);/* enforce circular crop in all browsers */
+        background: rgba(255,255,255,0.08);/* subtle bg for transparent images */
         box-shadow: 0 0 20px rgba(0, 184, 230, 0.4);
         transition: all 0.3s ease;
+        display: block;
       }
 
       .profile-avatar:hover {
@@ -480,6 +488,7 @@ body {
       .admin-section h5 {
         color: #fff;
         background: linear-gradient(90deg, #00b8e6, #04d1b7);
+        background-clip: text;
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         font-weight: 600;

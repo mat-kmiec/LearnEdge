@@ -93,14 +93,8 @@ public class UserService {
         User user = users.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("Użytkownik nie został znaleziony."));
 
-        // Check if email is being changed and if it's not already taken
-        if (!user.getEmail().equals(profileDto.getEmail()) && users.existsByEmail(profileDto.getEmail())) {
-            throw new EmailAlreadyTakenException();
-        }
-
         user.setFirstName(profileDto.getFirstName());
         user.setLastName(profileDto.getLastName());
-        user.setEmail(profileDto.getEmail());
 
         return users.save(user);
     }

@@ -22,7 +22,6 @@ public class ProfileController {
         UpdateProfileDto profileDto = new UpdateProfileDto();
         profileDto.setFirstName(user.getFirstName());
         profileDto.setLastName(user.getLastName());
-        profileDto.setEmail(user.getEmail());
         
         model.addAttribute("profile", profileDto);
         return "dashboard/profile";
