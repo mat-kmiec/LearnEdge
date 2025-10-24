@@ -49,8 +49,8 @@
                 alt="Avatar"
                 class="profile-avatar mb-3"
               />
-              <h4 class="fw-bold">Jan Kowalski</h4>
-              <p class="text-light small mb-3">jan.kowalski@example.com</p>
+              <h4 class="fw-bold" th:text="${#authentication.principal.firstName + ' ' + #authentication.principal.lastName}">Jan Kowalski</h4>
+              <p class="text-light small mb-3" th:text="${#authentication.principal.email}">jan.kowalski@example.com</p>
               <button class="btn btn-gradient btn-sm w-100 mt-2">
                 <i class="bi bi-camera me-2"></i> Zmień zdjęcie
               </button>
@@ -63,7 +63,15 @@
               <div class="profile-section-title">
                 <i class="bi bi-person-circle"></i> Dane użytkownika
               </div>
-              <form>
+              <div th:if="${success}" class="alert alert-success mb-3" role="alert">
+                <i class="bi bi-check-circle me-2"></i>
+                <span th:text="${success}">Profil został zaktualizowany.</span>
+              </div>
+              <div th:if="${error}" class="alert alert-danger mb-3" role="alert">
+                <i class="bi bi-exclamation-triangle me-2"></i>
+                <span th:text="${error}">Wystąpił błąd podczas aktualizacji profilu.</span>
+              </div>
+              <form th:action="@{/profil}" method="post" th:object="${profile}">
                 <div class="row">
                   <div class="col-md-6 mb-3">
                     <label for="firstName">Imię</label>
@@ -71,7 +79,7 @@
                       type="text"
                       class="form-control"
                       id="firstName"
-                      value="Jan"
+                      th:field="*{firstName}"
                     />
                   </div>
                   <div class="col-md-6 mb-3">
@@ -80,7 +88,7 @@
                       type="text"
                       class="form-control"
                       id="lastName"
-                      value="Kowalski"
+                      th:field="*{lastName}"
                     />
                   </div>
                   <div class="col-md-12 mb-3">
@@ -89,7 +97,7 @@
                       type="email"
                       class="form-control"
                       id="email"
-                      value="jan.kowalski@example.com"
+                      th:field="*{email}"
                     />
                   </div>
                 </div>

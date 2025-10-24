@@ -26,16 +26,22 @@ public class User implements UserDetails {
     private String username;
 
     @Column(nullable = false)
-    private String password; // BCrypt
+    private String password;
 
     @Column(nullable = false, length = 30)
-    private String role;     // np. ROLE_USER, ROLE_ADMIN
+    private String role;
 
     @Column(nullable = false)
     private boolean enabled = true;
 
     @Column(unique = true)
     private String email;
+
+    @Column(name = "first_name")
+    private String firstName;
+
+    @Column(name = "last_name")
+    private String lastName;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<UserCourse> userCourses = new ArrayList<>();
