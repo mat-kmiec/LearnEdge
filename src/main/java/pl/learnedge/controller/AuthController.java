@@ -38,8 +38,6 @@ public class AuthController {
         }
     }
 
-    @GetMapping("/przypomnij-haslo")
-    public String forgotPassword() {
-        return "home/forgot-password";
-    }
+    // Metody związane z resetowaniem hasła przeniesione do PasswordResetController
+
 }
