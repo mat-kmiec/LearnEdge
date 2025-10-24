@@ -193,30 +193,45 @@
               <form class="row" id="changePasswordForm" onsubmit="return changePassword(event)">
                 <div class="col-md-4 mb-3">
                   <label for="currentPassword">Obecne hasło</label>
-                  <input
-                    type="password"
-                    class="form-control"
-                    id="currentPassword"
-                    placeholder="••••••••"
-                  />
+                  <div class="input-group">
+                    <input
+                      type="password"
+                      class="form-control"
+                      id="currentPassword"
+                      placeholder="••••••••"
+                    />
+                    <button class="btn btn-outline-secondary" type="button" onclick="togglePasswordVisibility('currentPassword')">
+                      <i class="bi bi-eye" id="currentPassword-icon"></i>
+                    </button>
+                  </div>
                 </div>
                 <div class="col-md-4 mb-3">
                   <label for="newPassword">Nowe hasło</label>
-                  <input
-                    type="password"
-                    class="form-control"
-                    id="newPassword"
-                    placeholder="Nowe hasło"
-                  />
+                  <div class="input-group">
+                    <input
+                      type="password"
+                      class="form-control"
+                      id="newPassword"
+                      placeholder="Nowe hasło"
+                    />
+                    <button class="btn btn-outline-secondary" type="button" onclick="togglePasswordVisibility('newPassword')">
+                      <i class="bi bi-eye" id="newPassword-icon"></i>
+                    </button>
+                  </div>
                 </div>
                 <div class="col-md-4 mb-3">
                   <label for="confirmPassword">Powtórz hasło</label>
-                  <input
-                    type="password"
-                    class="form-control"
-                    id="confirmPassword"
-                    placeholder="Powtórz nowe hasło"
-                  />
+                  <div class="input-group">
+                    <input
+                      type="password"
+                      class="form-control"
+                      id="confirmPassword"
+                      placeholder="Powtórz nowe hasło"
+                    />
+                    <button class="btn btn-outline-secondary" type="button" onclick="togglePasswordVisibility('confirmPassword')">
+                      <i class="bi bi-eye" id="confirmPassword-icon"></i>
+                    </button>
+                  </div>
                 </div>
                 <div class="col-12">
                   <button type="submit" class="btn btn-gradient w-100 mt-2">
@@ -306,6 +321,21 @@
         console.error('Upload error:', error);
         alert('Wystąpił błąd podczas przesyłania zdjęcia: ' + (error?.message || 'Spróbuj ponownie.'));
             });
+        }
+    }
+
+    function togglePasswordVisibility(fieldId) {
+        const input = document.getElementById(fieldId);
+        const icon = document.getElementById(fieldId + '-icon');
+        
+        if (input.type === 'password') {
+            input.type = 'text';
+            icon.classList.remove('bi-eye');
+            icon.classList.add('bi-eye-slash');
+        } else {
+            input.type = 'password';
+            icon.classList.remove('bi-eye-slash');
+            icon.classList.add('bi-eye');
         }
     }
 
