@@ -49,9 +49,15 @@
                 <div id="emailHint" class="invalid-hint text-danger small mt-1">Podaj poprawny adres e-mail.</div>
             </div>
 
-            <div class="form-floating mb-3">
+            <div class="form-floating mb-3 position-relative">
                 <input type="password" name="password" id="password" class="form-control" placeholder="Hasło" required>
                 <label for="password">Hasło</label>
+                <button class="btn btn-link position-absolute end-0 top-50 translate-middle-y" 
+                        type="button" 
+                        onclick="togglePasswordVisibility('password')"
+                        style="z-index: 10; text-decoration: none; margin-top: -12px;">
+                    <i class="bi bi-eye" id="password-icon"></i>
+                </button>
 
                 <!-- Pasek siły hasła -->
                 <div class="pw-wrap mt-2">
@@ -63,9 +69,15 @@
                 <div id="weak" class="invalid-hint text-danger small mt-1">Hasło zbyt słabe (min. 8 znaków, litera i cyfra).</div>
             </div>
 
-            <div class="form-floating mb-3">
+            <div class="form-floating mb-3 position-relative">
                 <input type="password" name="passwordConfirm" id="password2" class="form-control" placeholder="Powtórz hasło" required>
                 <label for="password2">Powtórz hasło</label>
+                <button class="btn btn-link position-absolute end-0 top-50 translate-middle-y" 
+                        type="button" 
+                        onclick="togglePasswordVisibility('password2')"
+                        style="z-index: 10; text-decoration: none;">
+                    <i class="bi bi-eye" id="password2-icon"></i>
+                </button>
                 <div id="mismatch" class="invalid-hint text-danger small mt-1">Hasła nie są takie same.</div>
             </div>
 
@@ -92,6 +104,20 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
+    function togglePasswordVisibility(fieldId) {
+        const input = document.getElementById(fieldId);
+        const icon = document.getElementById(fieldId + '-icon');
+        
+        if (input.type === 'password') {
+            input.type = 'text';
+            icon.classList.remove('bi-eye');
+            icon.classList.add('bi-eye-slash');
+        } else {
+            input.type = 'password';
+            icon.classList.remove('bi-eye-slash');
+            icon.classList.add('bi-eye');
+        }
+    }
 
     // ----- Walidacja + siła hasła -----
     (function(){
