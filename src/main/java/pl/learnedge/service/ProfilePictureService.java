@@ -61,14 +61,16 @@ public class ProfilePictureService {
             // Update user profile picture in database
             User currentUser = getAuthenticatedUser();
             
-            String profilePicturePath = "/uploads/profile-pictures/" + filename;
-            System.out.println("Setting profile picture path: " + profilePicturePath);
+            // Store public URL path like YouTube/Instagram
+            String publicUrl = "/uploads/profile-pictures/" + filename;
+            System.out.println("Setting profile picture public URL: " + publicUrl);
             
-            currentUser.setProfilePicture(profilePicturePath);
+            currentUser.setProfilePicture(publicUrl);
             userRepository.save(currentUser);
             System.out.println("User profile updated in database");
 
-            return profilePicturePath;
+            // Return public URL for immediate display
+            return publicUrl;
         } catch (IOException e) {
             throw new RuntimeException("Nie udało się zapisać zdjęcia profilowego", e);
         }
