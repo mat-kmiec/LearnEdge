@@ -50,6 +50,7 @@ public class User implements UserDetails {
     private String learningStyle;  // VISUAL, AUDITORY, KINESTHETIC
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
     private List<UserCourse> userCourses = new ArrayList<>();
 
     @Override

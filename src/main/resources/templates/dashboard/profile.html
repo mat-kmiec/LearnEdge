@@ -178,7 +178,19 @@
               <div class="profile-section-title">
                 <i class="bi bi-shield-lock"></i> Zmiana hasła
               </div>
-              <form class="row">
+              <!-- Alerts for change password -->
+              <div id="changePasswordSuccess" class="alert alert-success alert-dismissible fade" role="alert" style="display: none;">
+                <i class="bi bi-check-circle me-2"></i>
+                <span id="changePasswordSuccessMessage">Hasło zostało zmienione.</span>
+                <button type="button" class="btn-close" onclick="document.getElementById('changePasswordSuccess').style.display='none'"></button>
+              </div>
+              <div id="changePasswordError" class="alert alert-danger alert-dismissible fade" role="alert" style="display: none;">
+                <i class="bi bi-exclamation-triangle me-2"></i>
+                <span id="changePasswordErrorMessage"></span>
+                <button type="button" class="btn-close" onclick="document.getElementById('changePasswordError').style.display='none'"></button>
+              </div>
+
+              <form class="row" id="changePasswordForm" onsubmit="return changePassword(event)">
                 <div class="col-md-4 mb-3">
                   <label for="currentPassword">Obecne hasło</label>
                   <input
@@ -375,6 +387,92 @@
         // Scroll to alert
         alert.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
+
+  function showChangePasswordSuccess(message) {
+    const alert = document.getElementById('changePasswordSuccess');
+    document.getElementById('changePasswordSuccessMessage').textContent = message || 'Hasło zostało zmienione.';
+    alert.style.display = 'block';
+    alert.classList.add('show');
+    alert.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    setTimeout(() => {
+      alert.classList.remove('show');
+      setTimeout(() => alert.style.display = 'none', 150);
+    }, 5000);
+  }
+
+  function showChangePasswordError(message) {
+    const alert = document.getElementById('changePasswordError');
+    document.getElementById('changePasswordErrorMessage').textContent = message || 'Nie udało się zmienić hasła';
+    alert.style.display = 'block';
+    alert.classList.add('show');
+    alert.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  function changePassword(event) {
+    if (event) event.preventDefault();
+
+    // Hide previous alerts
+    document.getElementById('changePasswordSuccess').style.display = 'none';
+    document.getElementById('changePasswordError').style.display = 'none';
+
+    const currentPassword = document.getElementById('currentPassword').value;
+    const newPassword = document.getElementById('newPassword').value;
+    const confirmPassword = document.getElementById('confirmPassword').value;
+
+    if (!currentPassword || !newPassword || !confirmPassword) {
+      showChangePasswordError('Wszystkie pola są wymagane');
+      return false;
+    }
+    if (newPassword.length < 8) {
+      showChangePasswordError('Nowe hasło musi mieć co najmniej 8 znaków');
+      return false;
+    }
+    if (newPassword !== confirmPassword) {
+      showChangePasswordError('Hasła nie są takie same');
+      return false;
+    }
+    if (newPassword === currentPassword) {
+      showChangePasswordError('Nowe hasło nie może być takie samo jak obecne');
+      return false;
+    }
+
+    // CSRF
+    const tokenEl = document.querySelector('meta[name="_csrf"]');
+    const headerEl = document.querySelector('meta[name="_csrf_header"]');
+    const csrfToken = tokenEl ? tokenEl.getAttribute('content') : null;
+    const csrfHeader = headerEl ? headerEl.getAttribute('content') : null;
+
+    const headers = { 'Content-Type': 'application/json' };
+    if (csrfToken && csrfHeader) headers[csrfHeader] = csrfToken;
+
+    fetch('/api/profile/change-password', {
+      method: 'POST',
+      headers,
+      credentials: 'same-origin',
+      body: JSON.stringify({ currentPassword, newPassword })
+    })
+    .then(resp => resp.text().then(text => {
+      let data; try { data = text ? JSON.parse(text) : {}; } catch(e) { data = { error: text || 'Błąd' }; }
+      return { ok: resp.ok, data };
+    }))
+    .then(({ ok, data }) => {
+      if (!ok || data.error) {
+        showChangePasswordError(data.error || 'Wystąpił błąd podczas zmiany hasła');
+      } else {
+        showChangePasswordSuccess('Hasło zostało zmienione.');
+        // Clear inputs
+        document.getElementById('currentPassword').value = '';
+        document.getElementById('newPassword').value = '';
+        document.getElementById('confirmPassword').value = '';
+      }
+    })
+    .catch(err => {
+      console.error('Change password error:', err);
+      showChangePasswordError('Wystąpił błąd podczas zmiany hasła');
+    });
+
+    return false;
+  }
     </script>
   </body>
 </html>
