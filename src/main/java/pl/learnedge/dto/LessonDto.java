@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import pl.learnedge.model.Course;
 
 @Data
 @AllArgsConstructor
@@ -14,5 +15,5 @@ public class LessonDto {
     private String title;
     private String content;
     private int lessonOrder;
-    private int courseId;
+    private Course course;
 }
