@@ -14,4 +14,5 @@
     <include file="changelog/006-add-name-fields.xml" relativeToChangelogFile="true"/>
     <include file="changelog/007-update-test-user.xml" relativeToChangelogFile="true"/>
     <include file="changelog/007-add-profile-picture.xml" relativeToChangelogFile="true"/>
+    <include file="changelog/008-add-learning-style.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>

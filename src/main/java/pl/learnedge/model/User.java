@@ -46,6 +46,9 @@ public class User implements UserDetails {
     @Column(name = "profile_picture")
     private String profilePicture;
 
+    @Column(name = "learning_style", length = 20)
+    private String learningStyle;  // VISUAL, AUDITORY, KINESTHETIC
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<UserCourse> userCourses = new ArrayList<>();
 
