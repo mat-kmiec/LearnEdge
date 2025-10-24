@@ -9,13 +9,30 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
+import lombok.extern.slf4j.Slf4j;
 
 @Configuration
+@Slf4j
 public class SecurityConfig {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+    
+    @Bean 
+    public SimpleUrlAuthenticationSuccessHandler successHandler() {
+        return new SimpleUrlAuthenticationSuccessHandler() {
+            @Override
+            public void onAuthenticationSuccess(jakarta.servlet.http.HttpServletRequest request,
+                                             jakarta.servlet.http.HttpServletResponse response,
+                                             org.springframework.security.core.Authentication authentication) throws java.io.IOException,
+                                             jakarta.servlet.ServletException {
+                log.info("Authentication success. User: {}", authentication.getName());
+                super.onAuthenticationSuccess(request, response, authentication);
+            }
+        };
     }
 
     @Bean
@@ -46,6 +63,7 @@ public class SecurityConfig {
             .formLogin(form -> form
                 .loginPage("/logowanie")
                 .loginProcessingUrl("/login")
+                .successHandler(successHandler())
                 .defaultSuccessUrl("/panel", true)
                 .failureUrl("/logowanie?error=true")
                 .permitAll()
@@ -54,6 +72,7 @@ public class SecurityConfig {
             // ✅ Logowanie przez OAuth2 (Google/GitHub)
             .oauth2Login(oauth -> oauth
                 .loginPage("/logowanie")
+                .successHandler(successHandler())
                 .defaultSuccessUrl("/panel", true)
             )
 
@@ -67,7 +86,7 @@ public class SecurityConfig {
 
             // ✅ Wylogowanie
             .logout(logout -> logout
-                .logoutUrl("/logout")
+                .logoutUrl("/perform-logout")
                 .logoutSuccessUrl("/logowanie?logout")
                 .invalidateHttpSession(true)
                 .clearAuthentication(true)

@@ -9,5 +9,6 @@
     <include file="changelog/001-create-users.xml" relativeToChangelogFile="true"/>
     <include file="changelog/002-create-course.xml" relativeToChangelogFile="true"/>
     <include file="changelog/003-create-password-reset-token.xml" relativeToChangelogFile="true"/>
-
+    <include file="changelog/004-create-lessons.xml" relativeToChangelogFile="true"/>
+    <include file="changelog/005-create-user-course.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>

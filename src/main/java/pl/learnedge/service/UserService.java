@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import pl.learnedge.exception.EmailAlreadyTakenException;
+import pl.learnedge.exception.UserAlreadyExistException;
 import pl.learnedge.model.PasswordResetToken;
 import pl.learnedge.model.User;
 import pl.learnedge.repository.PasswordResetTokenRepository;
@@ -25,10 +27,10 @@ public class UserService {
     @Transactional
     public User register(String username, String email, String rawPassword) {
         if (users.existsByUsername(username)) {
-            throw new IllegalArgumentException("Użytkownik o takiej nazwie już istnieje");
+            throw new UserAlreadyExistException();
         }
         if (email != null && !email.isBlank() && users.existsByEmail(email)) {
-            throw new IllegalArgumentException("Email jest już zajęty");
+            throw new EmailAlreadyTakenException();
         }
 
         var user = User.builder()
@@ -45,17 +47,17 @@ public class UserService {
     @Transactional
     public void initiatePasswordReset(String email) {
         var user = users.findByEmail(email)
-                .orElse(null); // nie informujemy czy email istnieje
+                .orElse(null); // We don't inform if the email exists for security reasons
 
         if (user != null) {
-            // Unieważnij poprzednie tokeny
+            // Invalidate previous tokens
             resetTokens.findByUserEmailOrderByCreatedAtDesc(email)
                     .ifPresent(token -> {
                         token.setUsed(true);
                         resetTokens.save(token);
                     });
 
-            // Generuj nowy token
+            // Generate new token
             var token = UUID.randomUUID().toString();
             var resetToken = PasswordResetToken.builder()
                     .token(token)
