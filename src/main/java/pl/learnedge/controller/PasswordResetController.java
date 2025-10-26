@@ -10,13 +10,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pl.learnedge.model.User;
 import pl.learnedge.service.MailService;
-import pl.learnedge.service.PasswordResetService;
+import pl.learnedge.service.PasswordService;
 
 @Controller
 @RequiredArgsConstructor
 public class PasswordResetController {
 
-    private final PasswordResetService resetService;
+    private final PasswordService resetService;
     private final MailService mailService;
 
     @GetMapping("/przypomnij-haslo")
