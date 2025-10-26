@@ -59,7 +59,7 @@ public class PasswordService {
 
         User u = prt.getUser();
         u.setPassword(passwordEncoder.encode(newPassword));
-        userRepo.save(u);
+        userRepository.save(u);
 
         prt.setUsed(true);
         tokenRepo.save(prt);
