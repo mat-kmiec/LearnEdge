@@ -37,7 +37,4 @@ public class AuthController {
             return "redirect:/rejestracja?error=" + ex.getMessage().replace(" ", "%20");
         }
     }
-
-    // Metody związane z resetowaniem hasła przeniesione do PasswordResetController
-
 }
