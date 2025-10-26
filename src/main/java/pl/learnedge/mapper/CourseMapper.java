@@ -2,8 +2,12 @@ package pl.learnedge.mapper;
 
 import org.springframework.stereotype.Component;
 import pl.learnedge.dto.CourseDto;
+import pl.learnedge.dto.LessonDto;
 import pl.learnedge.model.Course;
+import pl.learnedge.model.Lesson;
 import pl.learnedge.model.UserCourse;
+
+import java.util.List;
 
 @Component
 public class CourseMapper {
@@ -31,6 +35,20 @@ public class CourseMapper {
         courseDto.setProgress(null);
         courseDto.setSlug(course.getSlug());
         return courseDto;
+    }
+
+    // Return course with assigned lesson
+    public CourseDto toDto(Course course, List<LessonDto> lessons) {
+        CourseDto courseDto = new CourseDto();
+        courseDto.setId(course.getId());
+        courseDto.setName(course.getName());
+        courseDto.setDescription(course.getDescription());
+        courseDto.setDifficulty(course.getDifficulty());
+        courseDto.setProgress(null);
+        courseDto.setSlug(course.getSlug());
+        courseDto.setLessons(lessons);
+        return courseDto;
+
     }
 
 

@@ -8,8 +8,9 @@ import pl.learnedge.model.UserCourse;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
-public interface CourseRepository extends JpaRepository<UserCourse, Long> {
+public interface CourseRepository extends JpaRepository<Course, Long> {
 
     @Query("""
     SELECT c FROM Course c
@@ -19,4 +20,5 @@ public interface CourseRepository extends JpaRepository<UserCourse, Long> {
 """)
     List<Course> findAllCoursesNotEnrolledByUser(@Param("userId") Long userId);
 
+    Optional<Course> findBySlug(String slug);
 }

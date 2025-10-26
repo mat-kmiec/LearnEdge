@@ -43,7 +43,8 @@ public class CourseController {
 
     @GetMapping("/kurs/{slug}")
     public String course(@PathVariable String slug, Model model){
-
+        CourseDto course =  courseService.getCourseBySlug(slug);
+        model.addAttribute("course", course);
         return "course/course";
     }
 
