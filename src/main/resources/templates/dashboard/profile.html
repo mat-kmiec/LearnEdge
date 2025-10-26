@@ -503,6 +503,31 @@
 
     return false;
   }
+
+  // Set current learning style when page loads
+  document.addEventListener('DOMContentLoaded', function() {
+    const currentStyleElement = document.getElementById('currentLearningStyleText');
+    const selectElement = document.getElementById('learningStyle');
+    
+    if (currentStyleElement && selectElement) {
+      const currentStyleText = currentStyleElement.textContent.trim();
+      
+      // Map display text to values
+      let currentStyleValue = null;
+      if (currentStyleText.includes('Wzrokowiec')) {
+        currentStyleValue = 'VISUAL';
+      } else if (currentStyleText.includes('Słuchowiec')) {
+        currentStyleValue = 'AUDITORY';
+      } else if (currentStyleText.includes('Kinestetyk')) {
+        currentStyleValue = 'KINESTHETIC';
+      }
+      
+      // Set the select value
+      if (currentStyleValue) {
+        selectElement.value = currentStyleValue;
+      }
+    }
+  });
     </script>
   </body>
 </html>
