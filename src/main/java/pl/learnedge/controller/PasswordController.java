@@ -1,6 +1,7 @@
 package pl.learnedge.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.constraints.Email;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pl.learnedge.dto.ChangePasswordRequest;
 import pl.learnedge.model.User;
-import pl.learnedge.service.MailService;
+import pl.learnedge.service.EmailService;
 import pl.learnedge.service.PasswordService;
 
 import java.util.HashMap;
@@ -24,7 +25,7 @@ import java.util.Map;
 @Slf4j
 public class PasswordController {
 
-    private final MailService mailService;
+    private final EmailService mailService;
     private final PasswordService passwordService;
 
     @GetMapping("/przypomnij-haslo")
