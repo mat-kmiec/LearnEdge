@@ -1,13 +1,16 @@
 package pl.learnedge.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import pl.learnedge.dto.LessonDto;
 import pl.learnedge.mapper.CourseMapper;
 import pl.learnedge.service.LessonService;
+
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -31,6 +34,24 @@ public class LessonController {
         model.addAttribute("courseName", courseName);
         return "course/create-lesson";
     }
+
+    @PostMapping(
+            value = "/api/lessons/save",
+            consumes = {"multipart/form-data"}
+    )
+    @ResponseBody
+    public ResponseEntity<?> saveLesson(
+            @RequestParam("courseId") Long courseId,
+            @RequestParam("title") String title,
+            @RequestParam("contentHtml") String contentHtml,
+            @RequestParam(value = "images", required = false) List<MultipartFile> images,
+            @RequestParam(value = "audio", required = false) List<MultipartFile> audio) {
+
+        System.err.println("DZIALA");
+        lessonService.saveLesson(courseId, title, contentHtml, images, audio);
+        return ResponseEntity.ok("Lesson saved successfully");
+    }
+
 }
 
 

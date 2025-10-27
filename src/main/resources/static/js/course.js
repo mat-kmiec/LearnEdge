@@ -397,53 +397,62 @@ document.getElementById("imageFile").addEventListener("change", (e) => {
 
 // 🔹 Dodanie obrazu do lekcji (bez wysyłania)
 document.getElementById("addImageBtn").addEventListener("click", (e) => {
-  const modal = e.target.closest(".modal"); // ⬅️ aktualny modal (addImageModal)
-  const fileInput = document.getElementById("imageFile");
-  const file = fileInput.files[0];
+    const modal = e.target.closest(".modal");
+    const fileInput = document.getElementById("imageFile");
+    const file = fileInput.files[0];
 
-  if (!file) {
-    alert("Wybierz plik JPG lub PNG!");
-    return;
-  }
+    if (!file) {
+        alert("Wybierz plik JPG lub PNG!");
+        return;
+    }
 
-  const ext = file.name.split(".").pop().toLowerCase();
-  if (!["jpg", "jpeg", "png"].includes(ext)) {
-    alert("Dozwolone są tylko pliki JPG lub PNG!");
-    return;
-  }
+    const ext = file.name.split(".").pop().toLowerCase();
+    if (!["jpg", "jpeg", "png"].includes(ext)) {
+        alert("Dozwolone są tylko pliki JPG lub PNG!");
+        return;
+    }
 
-  const previewUrl = URL.createObjectURL(file);
+    // 🔹 Generujemy unikalną nazwę (tak jak w audio)
+    const uniqueName = `${crypto.randomUUID()}-${file.name}`;
 
-  // 🔹 Pobieramy zaznaczone typy uczniów z modala
-  const selected = [...modal.querySelectorAll(".learning-type:checked")]
-    .map(cb => cb.value)
-    .join(",") || "0"; // jeśli nic nie zaznaczone → 0 = wszyscy
+    // 🔹 Podmieniamy nazwę pliku w obiekcie File, żeby backend ją rozpoznał
+    Object.defineProperty(file, "name", { value: uniqueName });
 
-  // 🔹 Tworzymy blok z atrybutem learning
-  const newBlock = {
-    id: Date.now(),
-    type: "image",
-    previewSrc: previewUrl, // tylko podgląd
-    fileExtension: ext,
-    tempFileIndex: pendingImageFiles.length, // numer pliku lokalnie
-    learning: selected, // 🧠 dodane
-  };
+    // 🔹 Tworzymy podgląd dla przeglądarki
+    const previewUrl = URL.createObjectURL(file);
 
-  // zapisujemy plik do pamięci lokalnej
-  pendingImageFiles.push(file);
-  lessonBlocks.push(newBlock);
+    // 🔹 Pobieramy zaznaczone typy uczniów
+    const selected = [...modal.querySelectorAll(".learning-type:checked")]
+        .map(cb => cb.value)
+        .join(",") || "0";
 
-  updateLessonPreview();
+    // 🔹 Tworzymy blok lekcji (będzie użyty przy generowaniu HTML)
+    const newBlock = {
+        id: Date.now(),
+        type: "image",
+        src: previewUrl,       // lokalny podgląd
+        title: uniqueName,     // unikalna nazwa pliku (backend zamieni)
+        alt: file.name.replace(/\.[^.]+$/, ''), // opis = nazwa bez rozszerzenia
+        tempFileIndex: pendingImageFiles.length,
+        learning: selected,
+    };
 
-  // Reset i zamknięcie modala
-  fileInput.value = "";
-  modal.querySelectorAll(".learning-type:checked").forEach(cb => cb.checked = false);
-  document.getElementById("imagePreview").classList.add("d-none");
-  const bsModal = bootstrap.Modal.getInstance(modal);
-  bsModal.hide();
+    // 🔹 Zapisz plik i blok
+    pendingImageFiles.push(file);
+    lessonBlocks.push(newBlock);
 
-  console.log("Aktualne bloki lekcji:", lessonBlocks);
+    updateLessonPreview();
+
+    // 🔹 Reset inputa i zamknięcie modala
+    fileInput.value = "";
+    modal.querySelectorAll(".learning-type:checked").forEach(cb => cb.checked = false);
+    document.getElementById("imagePreview").classList.add("d-none");
+    const bsModal = bootstrap.Modal.getInstance(modal);
+    bsModal.hide();
+
+    console.log("🖼️ Dodano obraz:", uniqueName, "(", file.size, "B )");
 });
+
 
 
 
@@ -832,51 +841,63 @@ const pendingAudioFiles = [];
 
 // 🔹 Dodawanie pliku audio (z typami uczniów)
 document.getElementById("addAudioBtn").addEventListener("click", (e) => {
-  const modal = e.target.closest(".modal");
-  const fileInput = document.getElementById("audioFile");
-  const file = fileInput.files[0];
+    const modal = e.target.closest(".modal");
+    const fileInput = document.getElementById("audioFile");
+    const file = fileInput.files[0];
 
-  if (!file) {
-    alert("Wybierz plik MP3!");
-    return;
-  }
+    if (!file) {
+        alert("Wybierz plik MP3!");
+        return;
+    }
 
-  const ext = file.name.split(".").pop().toLowerCase();
-  if (ext !== "mp3") {
-    alert("Dozwolone są tylko pliki MP3!");
-    return;
-  }
+    const ext = file.name.split(".").pop().toLowerCase();
+    if (ext !== "mp3") {
+        alert("Dozwolone są tylko pliki MP3!");
+        return;
+    }
 
-  // 🔹 Pobieramy zaznaczone typy uczniów
-  const selected = [...modal.querySelectorAll(".learning-type:checked")]
-    .map(cb => cb.value)
-    .join(",") || "0";
+    // 🔹 Wybór typów uczniów
+    const selected = [...modal.querySelectorAll(".learning-type:checked")]
+        .map(cb => cb.value)
+        .join(",") || "0";
 
-  const previewUrl = URL.createObjectURL(file);
-  const newBlock = {
-    id: Date.now(),
-    type: "audio",
-    src: previewUrl, // tylko podglądowo
-    title: file.name,
-    tempFileIndex: pendingAudioFiles.length,
-    learning: selected, // 🧠 dodane pole z typami uczniów
-  };
+    // 🔹 Generujemy unikalną nazwę pliku (frontend + backend powiązane)
+    const uniqueName = `${crypto.randomUUID()}-${file.name}`;
 
-  // dodajemy do tablicy bloków i tymczasowych plików
-  lessonBlocks.push(newBlock);
-  pendingAudioFiles.push(file);
+    // 🔹 Tworzymy podgląd audio (działa tylko w przeglądarce)
+    const previewUrl = URL.createObjectURL(file);
 
-  updateLessonPreview();
+    // 🔹 Ustawiamy właściwość originalName, by backend mógł odczytać nazwę
+    Object.defineProperty(file, "name", { value: uniqueName });
 
-  // reset i zamknięcie modala
-  fileInput.value = "";
-  document.getElementById("audioPreview").classList.add("d-none");
-  modal.querySelectorAll(".learning-type:checked").forEach(cb => cb.checked = false);
-  const bsModal = bootstrap.Modal.getInstance(modal);
-  bsModal.hide();
+    // 🔹 Dodajemy do tablicy plików (musi być przed wyczyszczeniem inputa)
+    pendingAudioFiles.push(file);
 
-  console.log("Bloki lekcji:", lessonBlocks);
+    // 🔹 Tworzymy obiekt bloku lekcji
+    const newBlock = {
+        id: Date.now(),
+        type: "audio",
+        src: previewUrl, // tylko do podglądu
+        title: uniqueName, // nazwa zgodna z tą, którą backend zapisze
+        tempFileIndex: pendingAudioFiles.length - 1,
+        learning: selected,
+    };
+
+    // 🔹 Dodaj blok do listy i odśwież podgląd
+    lessonBlocks.push(newBlock);
+    updateLessonPreview();
+
+    // ✅ Czyszczenie inputa i zamknięcie modala
+    fileInput.value = "";
+    document.getElementById("audioPreview").classList.add("d-none");
+    modal.querySelectorAll(".learning-type:checked").forEach(cb => cb.checked = false);
+    const bsModal = bootstrap.Modal.getInstance(modal);
+    bsModal.hide();
+
+    console.log("🎵 Dodano audio:", uniqueName, "(", file.size, "B )");
 });
+
+
 
 
 // 🔹 Funkcja generująca kompletny HTML lekcji
@@ -912,3 +933,43 @@ document.getElementById("previewLessonHTMLBtn")?.addEventListener("click", () =>
     </html>
   `);
 });
+
+
+
+document.getElementById("saveLessonBtn").addEventListener("click", saveLesson);
+
+async function saveLesson() {
+    const courseId = document.getElementById("courseId").value;
+    const lessonTitle = document.getElementById("lessonName").value;
+    let html = generateLessonHTML();
+
+// 🔹 Podmieniamy blob:http... na faktyczne nazwy plików (uniqueName)
+    pendingAudioFiles.forEach(file => {
+        if (file.name) {
+            // znajdź pierwsze wystąpienie blob:... i podmień na nazwę pliku
+            html = html.replace(/blob:[^"]+/i, file.name);
+        }
+    });
+
+    const formData = new FormData();
+    formData.append("courseId", courseId);
+    formData.append("title", lessonTitle);
+    formData.append("contentHtml", html);
+
+    // dodajemy pliki z pendingImageFiles i pendingAudioFiles
+    pendingImageFiles.forEach(file => formData.append("images", file));
+    pendingAudioFiles.forEach(file => formData.append("audio", file));
+
+    try {
+        const res = await fetch("/api/lessons/save", {
+            method: "POST",
+            body: formData,
+        });
+
+        if (!res.ok) throw new Error("Błąd podczas zapisu lekcji");
+        alert("✅ Lekcja zapisana pomyślnie!");
+    } catch (err) {
+        console.error(err);
+        alert("❌ Wystąpił błąd przy zapisie lekcji");
+    }
+}
