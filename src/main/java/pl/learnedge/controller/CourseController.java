@@ -6,7 +6,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pl.learnedge.dto.CourseDto;
+import pl.learnedge.exception.UserAlreadyEnrollException;
 import pl.learnedge.model.Course;
 import pl.learnedge.model.User;
 import pl.learnedge.service.AuthService;
@@ -46,6 +48,18 @@ public class CourseController {
         CourseDto course =  courseService.getCourseBySlug(slug);
         model.addAttribute("course", course);
         return "course/course";
+    }
+
+    @GetMapping("/zapisz-na-kurs/{id}")
+    public String enrollToCourse(@PathVariable Long id, RedirectAttributes redirectAttributes){
+        Long userId = authService.getCurrentUserId();
+        try{
+            courseService.enrollUserForCourse(id, userId);
+            redirectAttributes.addFlashAttribute("successMessage", "Zostałeś zapisany na kurs!");
+        }catch (UserAlreadyEnrollException e){
+            redirectAttributes.addFlashAttribute("errorMessage", "Jesteś już zapisany na ten kurs!");
+        }
+        return "redirect:/panel";
     }
 
 
