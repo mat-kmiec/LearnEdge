@@ -6,6 +6,7 @@
     <meta name="_csrf" th:content="${_csrf.token}"/>
     <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
     <title>LearnEdge – Ankieta AI</title>
+    <link rel="icon" type="image/x-icon" th:href="@{/img/favicon.ico}" href="../../static/img/favicon.ico"/>
 
     <!-- Bootstrap -->
     <link
@@ -102,10 +103,316 @@
             </div>
           </div>
 
+          <!-- Pytanie 3 -->
+          <div class="survey-question">
+            <h6 class="fw-bold mb-3">3. Podczas prezentacji wolisz gdy:</h6>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="q3" value="visual" />
+              <label class="form-check-label">pokazywane są slajdy i grafiki</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="q3" value="auditory" />
+              <label class="form-check-label">prowadzący mówi płynnie i wyraźnie</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="q3" value="kinesthetic" />
+              <label class="form-check-label">możesz coś robić rękami lub poruszać się</label>
+            </div>
+          </div>
+
+          <!-- Pytanie 4 -->
+          <div class="survey-question">
+            <h6 class="fw-bold mb-3">4. Kiedy tłumaczysz drogę komuś:</h6>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="q4" value="visual" />
+              <label class="form-check-label">rysujesz mapkę lub pokazujesz</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="q4" value="auditory" />
+              <label class="form-check-label">dokładnie opisujesz słowami</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="q4" value="kinesthetic" />
+              <label class="form-check-label">gestykulujesz i wskazujesz kierunki</label>
+            </div>
+          </div>
+
+          <!-- Pytanie 5 -->
+          <div class="survey-question">
+            <h6 class="fw-bold mb-3">5. W wolnym czasie najchętniej:</h6>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="q5" value="visual" />
+              <label class="form-check-label">czytam książki lub oglądam filmy</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="q5" value="auditory" />
+              <label class="form-check-label">słucham muzyki lub podcastów</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="q5" value="kinesthetic" />
+              <label class="form-check-label">uprawiam sport lub hobby manualne</label>
+            </div>
+          </div>
+
+          <!-- Pytanie 6 -->
+          <div class="survey-question">
+            <h6 class="fw-bold mb-3">6. Gdy muszę zapamiętać numer telefonu:</h6>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="q6" value="visual" />
+              <label class="form-check-label">zapisuję go lub wyobrażam sobie cyfry</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="q6" value="auditory" />
+              <label class="form-check-label">powtarzam go sobie na głos</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="q6" value="kinesthetic" />
+              <label class="form-check-label">wystukuję rytm cyframi</label>
+            </div>
+          </div>
+
+          <!-- Pytanie 7 -->
+          <div class="survey-question">
+            <h6 class="fw-bold mb-3">7. Podczas nauki języka obcego wolę:</h6>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="q7" value="visual" />
+              <label class="form-check-label">czytać teksty i oglądać napisy</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="q7" value="auditory" />
+              <label class="form-check-label">słuchać nagrań i rozmawiać</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="q7" value="kinesthetic" />
+              <label class="form-check-label">ćwiczyć przez pisanie i gesty</label>
+            </div>
+          </div>
+
+          <!-- Pytanie 8 -->
+          <div class="survey-question">
+            <h6 class="fw-bold mb-3">8. W sklepie najłatwiej znajduję produkty gdy:</h6>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="q8" value="visual" />
+              <label class="form-check-label">mam listę zapisaną lub pamiętam gdzie są</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="q8" value="auditory" />
+              <label class="form-check-label">pytam sprzedawcę</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="q8" value="kinesthetic" />
+              <label class="form-check-label">przechodzę po sklepie i szukam</label>
+            </div>
+          </div>
+
+          <!-- Pytanie 9 -->
+          <div class="survey-question">
+            <h6 class="fw-bold mb-3">9. Przy rozwiązywaniu problemów matematycznych:</h6>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="q9" value="visual" />
+              <label class="form-check-label">rysuję schematy i wykresy</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="q9" value="auditory" />
+              <label class="form-check-label">dyskutuję z innymi lub mówię na głos</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="q9" value="kinesthetic" />
+              <label class="form-check-label">używam klocków, liczydła lub palców</label>
+            </div>
+          </div>
+
+          <!-- Pytanie 10 -->
+          <div class="survey-question">
+            <h6 class="fw-bold mb-3">10. Gdy się stresuję przed egzaminem:</h6>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="q10" value="visual" />
+              <label class="form-check-label">przeglądam notatki i podsumowania</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="q10" value="auditory" />
+              <label class="form-check-label">rozmawiam z kimś o materiale</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="q10" value="kinesthetic" />
+              <label class="form-check-label">chodzę lub ruszam się</label>
+            </div>
+          </div>
+
+          <!-- Pytanie 11 -->
+          <div class="survey-question">
+            <h6 class="fw-bold mb-3">11. Najlepiej koncentruję się gdy:</h6>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="q11" value="visual" />
+              <label class="form-check-label">mam uporządkowane miejsce pracy</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="q11" value="auditory" />
+              <label class="form-check-label">jest cicho lub gra spokojna muzyka</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="q11" value="kinesthetic" />
+              <label class="form-check-label">mogę się ruszać lub mam coś w rękach</label>
+            </div>
+          </div>
+
+          <!-- Pytanie 12 -->
+          <div class="survey-question">
+            <h6 class="fw-bold mb-3">12. Podczas robienia notatek:</h6>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="q12" value="visual" />
+              <label class="form-check-label">używam kolorów, podkreśleń i schematów</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="q12" value="auditory" />
+              <label class="form-check-label">przepisuję lub nagrywam własne tłumaczenia</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="q12" value="kinesthetic" />
+              <label class="form-check-label">piszę szybko, często bazgrołami</label>
+            </div>
+          </div>
+
+          <!-- Pytanie 13 -->
+          <div class="survey-question">
+            <h6 class="fw-bold mb-3">13. Przy montażu mebli z instrukcją:</h6>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="q13" value="visual" />
+              <label class="form-check-label">dokładnie studiuję rysunki</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="q13" value="auditory" />
+              <label class="form-check-label">proszę kogoś o pomoc lub tłumaczenie</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="q13" value="kinesthetic" />
+              <label class="form-check-label">zaczynam składać metodą prób i błędów</label>
+            </div>
+          </div>
+
+          <!-- Pytanie 14 -->
+          <div class="survey-question">
+            <h6 class="fw-bold mb-3">14. Jeśli zapominam gdzie położyłem klucze:</h6>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="q14" value="visual" />
+              <label class="form-check-label">przeglądam wzrokiem wszystkie miejsca</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="q14" value="auditory" />
+              <label class="form-check-label">próbuję sobie przypomnieć gdzie je słyszałem</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="q14" value="kinesthetic" />
+              <label class="form-check-label">szukam wszędzie rękami</label>
+            </div>
+          </div>
+
+          <!-- Pytanie 15 -->
+          <div class="survey-question">
+            <h6 class="fw-bold mb-3">15. W restauracji najczęściej:</h6>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="q15" value="visual" />
+              <label class="form-check-label">czytam menu i patrzę na zdjęcia dań</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="q15" value="auditory" />
+              <label class="form-check-label">pytam kelnera o rekomendacje</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="q15" value="kinesthetic" />
+              <label class="form-check-label">zamawiam to co już znam i lubiję</label>
+            </div>
+          </div>
+
+          <!-- Pytanie 16 -->
+          <div class="survey-question">
+            <h6 class="fw-bold mb-3">16. Podczas czytania książki:</h6>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="q16" value="visual" />
+              <label class="form-check-label">wyobrażam sobie sceny jak film</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="q16" value="auditory" />
+              <label class="form-check-label">słyszę głosy bohaterów w głowie</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="q16" value="kinesthetic" />
+              <label class="form-check-label">odczuwam emocje i napięcie</label>
+            </div>
+          </div>
+
+          <!-- Pytanie 17 -->
+          <div class="survey-question">
+            <h6 class="fw-bold mb-3">17. Gdy uczę się nowego programu komputerowego:</h6>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="q17" value="visual" />
+              <label class="form-check-label">czytam instrukcje i patrzę na screenshoty</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="q17" value="auditory" />
+              <label class="form-check-label">proszę kogoś żeby mi pokazał</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="q17" value="kinesthetic" />
+              <label class="form-check-label">eksperymentuję i klikam na wszystko</label>
+            </div>
+          </div>
+
+          <!-- Pytanie 18 -->
+          <div class="survey-question">
+            <h6 class="fw-bold mb-3">18. Na spotkaniu grupowym najchętniej:</h6>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="q18" value="visual" />
+              <label class="form-check-label">robię notatki i patrzę na tablicę</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="q18" value="auditory" />
+              <label class="form-check-label">uczestniczę w dyskusji</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="q18" value="kinesthetic" />
+              <label class="form-check-label">przesiadam się lub ruszam przedmiotami</label>
+            </div>
+          </div>
+
+          <!-- Pytanie 19 -->
+          <div class="survey-question">
+            <h6 class="fw-bold mb-3">19. Gdy muszę zapamiętać listę zakupów:</h6>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="q19" value="visual" />
+              <label class="form-check-label">zapisuję na papierze lub w telefonie</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="q19" value="auditory" />
+              <label class="form-check-label">powtarzam sobie na głos</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="q19" value="kinesthetic" />
+              <label class="form-check-label">wyobrażam sobie chodzenie po sklepie</label>
+            </div>
+          </div>
+
+          <!-- Pytanie 20 -->
+          <div class="survey-question">
+            <h6 class="fw-bold mb-3">20. Podczas oglądania filmu edukacyjnego:</h6>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="q20" value="visual" />
+              <label class="form-check-label">skupiam się na obrazie i napisach</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="q20" value="auditory" />
+              <label class="form-check-label">słucham komentarza i dialogów</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="q20" value="kinesthetic" />
+              <label class="form-check-label">robię notatki lub gestykuluję</label>
+            </div>
+          </div>
+
           <!-- Opis tekstowy -->
           <div class="survey-question">
             <h6 class="fw-bold mb-3">
-              3. Opisz siebie lub swoje podejście do nauki:
+              21. Opisz siebie lub swoje podejście do nauki:
             </h6>
             <textarea
               name="userDescription"
