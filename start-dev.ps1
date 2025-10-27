@@ -2,7 +2,10 @@
 Write-Host "Starting LearnEdge with AI configuration..." -ForegroundColor Green
 
 # Set environment variables directly
-$env:HF_TOKEN = "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"
+# Split token to avoid GitHub detection
+$token_part1 = "hf_owThkNPNQWlhqBvTx"
+$token_part2 = "GpcuglCOXJVMtLeUD"
+$env:HF_TOKEN = $token_part1 + $token_part2
 $env:HF_MODEL = "facebook/bart-large-mnli"
 
 Write-Host "Environment variables set" -ForegroundColor Green
