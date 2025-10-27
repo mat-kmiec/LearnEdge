@@ -19,6 +19,9 @@
             <column name="lesson_order" type="INT">
                 <constraints nullable="false"/>
             </column>
+            <column name="slug" type="VARCHAR(255)">
+                <constraints nullable="false" />
+            </column>
             <column name="course_id" type="BIGINT">
                 <constraints nullable="false"
                              foreignKeyName="fk_lessons_courses"
@@ -33,6 +36,7 @@
             <column name="content" value="Poznaj podstawowe zasady języka Java, jego historię i zastosowania."/>
             <column name="lesson_order" valueNumeric="1"/>
             <column name="course_id" valueNumeric="1"/>
+            <column name="slug" value="Wprowadzenie-do-java" />
         </insert>
 
         <insert tableName="lessons">
@@ -40,6 +44,7 @@
             <column name="content" value="Dowiedz się, jak deklarować zmienne, jakie są typy danych i jak ich używać."/>
             <column name="lesson_order" valueNumeric="2"/>
             <column name="course_id" valueNumeric="1"/>
+            <column name="slug" value="Zmienne-i-typy-danych" />
         </insert>
     </changeSet>
 </databaseChangeLog>
