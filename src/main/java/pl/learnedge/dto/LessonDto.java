@@ -16,4 +16,5 @@ public class LessonDto {
     private String content;
     private int lessonOrder;
     private Course course;
+    private String slug;
 }

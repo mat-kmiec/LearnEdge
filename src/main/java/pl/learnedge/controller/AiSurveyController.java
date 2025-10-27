@@ -22,11 +22,11 @@ public class AiSurveyController {
         // Sprawdź czy AI jest dostępne
         boolean aiAvailable = learningStyleService.isAiAnalysisAvailable();
         model.addAttribute("aiAvailable", aiAvailable);
-        
+
         if (!aiAvailable) {
             model.addAttribute("message", "Analiza AI jest obecnie niedostępna. Możesz wybrać styl uczenia ręcznie.");
         }
-        
+
         return "dashboard/ankieta";
     }
 
@@ -42,13 +42,13 @@ public class AiSurveyController {
 
             // Analizuj odpowiedzi
             String learningStyle = learningStyleService.analyzeAndSaveLearningStyle(surveyAnswers);
-            
+
             return ResponseEntity.ok(Map.of(
                 "success", true,
                 "learningStyle", learningStyle,
                 "message", "Twój styl uczenia został przeanalizowany: " + translateStyle(learningStyle)
             ));
-            
+
         } catch (Exception e) {
             log.error("Błąd podczas analizy ankiety: ", e);
             return ResponseEntity.badRequest()
@@ -62,12 +62,12 @@ public class AiSurveyController {
         try {
             String selectedStyle = request.get("learningStyle");
             learningStyleService.saveLearningStyle(selectedStyle);
-            
+
             return ResponseEntity.ok(Map.of(
                 "success", true,
                 "message", "Styl uczenia został zapisany: " + translateStyle(selectedStyle)
             ));
-            
+
         } catch (Exception e) {
             log.error("Błąd podczas zapisywania stylu uczenia: ", e);
             return ResponseEntity.badRequest()

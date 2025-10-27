@@ -13,6 +13,7 @@ public class LessonMapper {
         lessonDto.setContent(lesson.getContent());
         lessonDto.setLessonOrder(lesson.getLessonOrder());
         lessonDto.setCourse(lesson.getCourse());
+        lessonDto.setSlug(lesson.getSlug());
         return lessonDto;
     }
 

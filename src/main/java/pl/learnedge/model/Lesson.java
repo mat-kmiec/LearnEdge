@@ -26,6 +26,9 @@ public class Lesson {
     @Column(name = "lesson_order", nullable = false)
     private Integer lessonOrder;
 
+    @Column(nullable = false, unique = true)
+    private String slug;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "course_id", nullable = false)
     private Course course;
