@@ -71,26 +71,6 @@
               />
             </div>
 
-            <!-- Styl nauki -->
-            <div class="mb-4">
-              <label for="learningStyle" class="form-label">Styl nauki</label>
-              <select
-                id="learningStyle"
-                class="form-select custom-select-learnedge"
-              >
-                <option value="" disabled selected>Wybierz styl...</option>
-                <option value="visual">
-                  👁️ Wizualny (obraz, wykres, diagram)
-                </option>
-                <option value="auditory">
-                  🎧 Słuchowy (nagranie, narracja)
-                </option>
-                <option value="kinesthetic">
-                  🧠 Kinestetyczny (działanie, ćwiczenie)
-                </option>
-              </select>
-            </div>
-
             <!-- Informacja o kursie (zablokowane) -->
             <div class="">
               <label for="courseName" class="form-label"
@@ -100,9 +80,17 @@
                 type="text"
                 id="courseName"
                 class="form-control"
-                value="Programowanie w Javie — poziom podstawowy"
+                th:value="${courseName}"
                 disabled
               />
+                <input
+                        hidden
+                        type="number"
+                        id="courseId"
+                        class="form-control"
+                        th:value="${courseId}"
+                        disabled
+                />
             </div>
           </form>
 
