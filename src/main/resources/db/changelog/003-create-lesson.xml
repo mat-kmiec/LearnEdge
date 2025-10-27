@@ -33,7 +33,166 @@
     <changeSet id="003-seed-lesson" author="learnedge" context="dev">
         <insert tableName="lessons">
             <column name="title" value="Wprowadzenie do Javy"/>
-            <column name="content" value="Poznaj podstawowe zasady języka Java, jego historię i zastosowania."/>
+            <column name="content">
+                <![CDATA[
+                <div data-learning="0">
+        <h3 class="course-section-title text-start mt-0 mb-3">
+          Wprowadzenie do języka Java
+        </h3>
+        </div>
+
+
+          <div class="course-text-content" data-learning="0">
+            <p>
+              Java to jeden z najpopularniejszych języków programowania na świecie. Jest wykorzystywany do tworzenia aplikacji webowych, mobilnych, desktopowych oraz systemów wbudowanych. Został opracowany przez firmę Sun Microsystems w 1995 roku, a obecnie jest rozwijany przez Oracle.
+            </p>
+          </div>
+
+
+      <div data-learning="0">
+        <h3 class="course-section-title text-start mt-0 mb-3">
+          Cechy języka JAVA
+        </h3>
+        </div>
+
+
+          <div class="course-text-content" data-learning="0">
+            <p>
+              <ul>
+    <li class="text-light"><strong>Obiektowość</strong> – wszystko w Javie jest obiektem lub klasą.</li>
+    <li class="text-light"><strong>Przenośność</strong> – aplikacje działają na dowolnym systemie z zainstalowaną maszyną JVM.</li>
+    <li class="text-light"><strong>Bezpieczeństwo</strong> – język zaprojektowany z myślą o ograniczaniu błędów i podatności.</li>
+    <li class="text-light"><strong>Automatyczne zarządzanie pamięcią</strong> – dzięki <em>Garbage Collector</em>.</li>
+  </ul>
+            </p>
+          </div>
+
+
+      <div data-learning="0">
+        <h3 class="course-section-title text-start mt-0 mb-3">
+          Pierwszy program w Javie
+        </h3>
+        </div>
+
+
+          <div class="course-text-content" data-learning="0">
+            <p>
+              Tradycyjnie, pierwszy program to „Hello World”. Poniżej przykład kompletnego kodu:
+            </p>
+          </div>
+
+
+    <div class="course-code-block my-4" data-learning="0">
+      <div class="course-code-header d-flex justify-content-between align-items-center mb-2">
+        <span><i class="bi bi-code-slash me-2"></i>Przykład Hello World</span>
+        <button class="btn btn-sm btn-outline-light course-copy-btn" onclick="copyCode(this)">
+          <i class="bi bi-clipboard"></i> Kopiuj
+        </button>
+      </div>
+      <pre><code class="language-java">public class Main {
+    public static void main(String[] args) {
+        System.out.println(&quot;Hello, World!&quot;);
+    }
+}</code></pre>
+    </div>
+
+
+          <div class="course-text-content" data-learning="0">
+            <p>
+              Każdy plik w Javie zawiera klasę (tutaj <code>Main</code>), a metoda <code>main()</code> jest punktem startowym programu.
+            </p>
+          </div>
+
+
+    <div class="course-text-block tip mt-3 mb-3" data-learning="0">
+      <h5 class="course-text-title">
+        <i class="bi bi-lightbulb me-2"></i>Wskazówka
+      </h5>
+      <div class="course-text-content">
+        <p><strong>Pamiętaj:</strong> Nazwa pliku w Javie musi być taka sama jak nazwa klasy publicznej – w tym przypadku <code>Main.java</code>.</p>
+      </div>
+    </div>
+
+
+      <div data-learning="0">
+        <h3 class="course-section-title text-start mt-0 mb-3">
+          Jak uruchomić program
+        </h3>
+        </div>
+
+
+          <div class="course-text-content" data-learning="0">
+            <p>
+              Aby uruchomić program, wykonaj w terminalu polecenia:
+            </p>
+          </div>
+
+
+          <div class="course-text-content" data-learning="0">
+            <p>
+              <pre><code>
+javac Main.java
+java Main
+  </code></pre>
+            </p>
+          </div>
+
+
+          <div class="course-text-content" data-learning="0">
+            <p>
+              Pierwsze polecenie kompiluje kod, drugie uruchamia wygenerowany plik bajtowy.
+            </p>
+          </div>
+
+
+    <div class="course-warning my-4" data-learning="0">
+      <i class="bi bi-exclamation-triangle me-2 text-warning"></i>
+      <strong>Uwaga:</strong> Jeśli zobaczysz błąd <code>javac</code> lub <code>java</code> jako „command not found”, oznacza to, że środowisko JDK nie jest poprawnie zainstalowane lub nie dodano go do zmiennej PATH.
+    </div>
+
+
+    <div class="course-quiz-block my-4" data-learning="0">
+      <h4 class="course-quiz-question mb-3">
+        <i class="bi bi-question-circle me-2"></i>Co robi metoda System.out.println()?
+      </h4>
+      <div class="course-quiz-options">
+
+      <button class="course-quiz-option" data-correct="false">Wczytuje dane z klawiatury</button>
+      <button class="course-quiz-option" data-correct="true">Wypisuje tekst na ekranie</button>
+      <button class="course-quiz-option" data-correct="false">Tworzy nową klasę</button>
+      </div>
+      <div class="course-quiz-feedback mt-3"></div>
+    </div>
+
+
+    <div class="course-quiz-block my-4" data-learning="0">
+      <h4 class="course-quiz-question mb-3">
+        <i class="bi bi-question-circle me-2"></i>Co oznacza skrót JVM?
+      </h4>
+      <div class="course-quiz-options">
+
+      <button class="course-quiz-option" data-correct="false">Java Variable Manager</button>
+      <button class="course-quiz-option" data-correct="true">Java Virtual Machine</button>
+      <button class="course-quiz-option" data-correct="false">Java Version Module</button>
+      </div>
+      <div class="course-quiz-feedback mt-3"></div>
+    </div>
+
+
+      <div data-learning="0">
+        <h3 class="course-section-title text-start mt-0 mb-3">
+          Podsumowanie
+        </h3>
+        </div>
+
+
+          <div class="course-text-content" data-learning="0">
+            <p>
+              W tej lekcji nauczyłeś się, czym jest Java, jakie ma podstawowe cechy, jak wygląda jej składnia oraz jak uruchomić pierwszy program. W kolejnej części przejdziemy do omówienia zmiennych i typów danych.
+            </p>
+          </div>
+                ]]>
+            </column>
             <column name="lesson_order" valueNumeric="1"/>
             <column name="course_id" valueNumeric="1"/>
             <column name="slug" value="Wprowadzenie-do-java" />
