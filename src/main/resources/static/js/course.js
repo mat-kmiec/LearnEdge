@@ -895,6 +895,7 @@ document.getElementById("saveLessonBtn").addEventListener("click", saveLesson);
 
 async function saveLesson() {
     const courseId = document.getElementById("courseId").value;
+    const courseSlug = document.getElementById("courseName").value;
     const lessonTitle = document.getElementById("lessonName").value;
     let html = generateLessonHTML();
 
@@ -938,10 +939,9 @@ async function saveLesson() {
         });
 
         if (!res.ok) throw new Error("Błąd podczas zapisu lekcji");
-        alert("✅ Lekcja zapisana pomyślnie!");
+        window.location.href = `/kurs/${courseSlug}`;
     } catch (err) {
         console.error(err);
-        alert("❌ Wystąpił błąd przy zapisie lekcji");
     }
 }
 
