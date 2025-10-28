@@ -45,12 +45,18 @@ public class LessonController {
             @RequestParam("title") String title,
             @RequestParam("contentHtml") String contentHtml,
             @RequestParam(value = "images", required = false) List<MultipartFile> images,
-            @RequestParam(value = "audio", required = false) List<MultipartFile> audio) {
+            @RequestParam(value = "imageNames", required = false) List<String> imageNames,
+            @RequestParam(value = "audio", required = false) List<MultipartFile> audio,
+            @RequestParam(value = "audioNames", required = false) List<String> audioNames
+    ) {
+        System.err.println("📘 Zapis lekcji: " + title);
+        System.err.println("🖼️ Ilość obrazków: " + (images != null ? images.size() : 0));
+        System.err.println("🎵 Ilość audio: " + (audio != null ? audio.size() : 0));
 
-        System.err.println("DZIALA");
-        lessonService.saveLesson(courseId, title, contentHtml, images, audio);
+        lessonService.saveLesson(courseId, title, contentHtml, images, imageNames, audio, audioNames);
         return ResponseEntity.ok("Lesson saved successfully");
     }
+
 
 }
 

@@ -16,6 +16,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.regex.Pattern;
 
 @Service
 @RequiredArgsConstructor
@@ -35,95 +36,95 @@ public class LessonService {
                            String title,
                            String contentHtml,
                            List<MultipartFile> images,
-                           List<MultipartFile> audioFiles) {
+                           List<String> imageNames,
+                           List<MultipartFile> audioFiles,
+                           List<String> audioNames) {
 
-        // 🔹 1. Znajdź kurs
         Course course = courseRepository.findById(courseId)
-                .orElseThrow(() -> new RuntimeException("Nie znaleziono kursu"));
+                .orElseThrow(() -> new RuntimeException("Nie znaleziono kursu o ID: " + courseId));
 
-        // 🔹 2. Utwórz obiekt lekcji
         Lesson lesson = new Lesson();
         lesson.setTitle(title);
         lesson.setCourse(course);
         lesson.setLessonOrder(0);
         lesson.setSlug(generateSlug(title));
-        lesson.setContent(""); // tymczasowo, by spełnić NOT NULL
+        lesson.setContent("");
         lesson = lessonRepository.save(lesson);
 
-        // 🔹 3. Utwórz docelowy katalog assets/{slug}/{lessonId}
-        Path baseDir = Paths.get("src/main/resources/static/assets",
-                course.getSlug(), lesson.getId().toString());
+        Path baseDir = Paths.get("uploads", "courses", course.getSlug(), lesson.getId().toString());
         try {
             Files.createDirectories(baseDir);
         } catch (IOException e) {
-            throw new RuntimeException("Nie można utworzyć katalogu lekcji", e);
+            throw new RuntimeException("Nie można utworzyć katalogu lekcji: " + baseDir, e);
         }
 
-        // 🔹 4. Zapisz pliki i zamień ścieżki w HTML
-        Map<String, String> replacements = new HashMap<>();
-        saveUploadedFiles(images, baseDir, replacements);
-        saveUploadedFiles(audioFiles, baseDir, replacements);
+        Map<String, String> imageReplacements = new HashMap<>();
+        Map<String, String> audioReplacements = new HashMap<>();
 
-        for (Map.Entry<String, String> entry : replacements.entrySet()) {
-            String oldName = entry.getKey();
-            String newPath = "/assets/" + course.getSlug() + "/" + lesson.getId() + "/" + entry.getValue();
+        saveUploadedFiles(images, imageNames, baseDir, imageReplacements);
+        saveUploadedFiles(audioFiles, audioNames, baseDir, audioReplacements);
 
-            // 🔹 zamień src="blob:..." lub src="oldName" na src="newPath"
+        String basePath = "/uploads/courses/" + course.getSlug() + "/" + lesson.getId() + "/";
+
+        for (String oldName : imageReplacements.keySet()) {
+            if (!oldName.toLowerCase().matches(".*\\.(jpg|jpeg|png)$")) continue;
+            String escaped = Pattern.quote(oldName);
             contentHtml = contentHtml.replaceAll(
-                    "(?i)(src=\")([^\"]*" + oldName + ")(\")",
-                    "$1" + newPath + "$3"
+                    "(?i)(src=\")([^\"]*" + escaped + ")(\")",
+                    "$1" + basePath + oldName + "$3"
             );
-
-            // 🔹 jeśli coś zostało z blobów — podmień też je globalnie
-            contentHtml = contentHtml.replaceAll("(?i)blob:[a-z0-9\\-:/.]+", newPath);
         }
 
+        for (String oldName : audioReplacements.keySet()) {
+            if (!oldName.toLowerCase().endsWith(".mp3")) continue;
+            String escaped = Pattern.quote(oldName);
+            contentHtml = contentHtml.replaceAll(
+                    "(?i)(src=\")([^\"]*" + escaped + ")(\")",
+                    "$1" + basePath + oldName + "$3"
+            );
+        }
 
-        // 🔹 5. Zapisz zaktualizowaną treść lekcji
+        contentHtml = contentHtml.replaceAll("(?i)src=\"blob:[^\"]+\"", "");
         lesson.setContent(contentHtml);
         lessonRepository.save(lesson);
+
     }
 
-    private void saveUploadedFiles(List<MultipartFile> files, Path baseDir, Map<String, String> replacements) {
-        if (files == null) return;
-        for (MultipartFile file : files) {
+    private void saveUploadedFiles(List<MultipartFile> files,
+                                   List<String> namesFromJs,
+                                   Path baseDir,
+                                   Map<String, String> replacements) {
+
+        if (files == null || files.isEmpty()) return;
+
+        for (int i = 0; i < files.size(); i++) {
+            MultipartFile file = files.get(i);
+            if (file == null || file.isEmpty()) continue;
+
+            String finalName;
+            if (namesFromJs != null && i < namesFromJs.size() && namesFromJs.get(i) != null) {
+                finalName = Paths.get(namesFromJs.get(i)).getFileName().toString();
+            } else {
+                finalName = UUID.randomUUID() + "-" + (file.getOriginalFilename() != null ? file.getOriginalFilename() : "plik");
+            }
+
+            Path destPath = baseDir.resolve(finalName);
+
             try {
-                String original = file.getOriginalFilename();
-                if (original == null || original.isBlank()) {
-                    original = "plik.mp3"; // lub plik.png
-                }
-
-                // zabezpieczenie przed ścieżkami
-                original = Paths.get(original).getFileName().toString();
-
-                // unikalna nazwa
-                String fileName = UUID.randomUUID() + "-" + original;
-                Path path = baseDir.resolve(fileName);
-
-                file.transferTo(path);
-
-                replacements.put(original, fileName);
-
-                System.out.println("📥 Zapisano plik: " + fileName + " (" + file.getSize() + " B)");
+                file.transferTo(destPath);
+                replacements.put(finalName, finalName);
             } catch (IOException e) {
-                throw new RuntimeException("Błąd przy zapisie pliku: " + file.getOriginalFilename(), e);
+                throw new RuntimeException("Błąd przy zapisie pliku: " + finalName, e);
             }
         }
     }
 
     private String generateSlug(String title) {
         if (title == null) return "";
-
         return title.toLowerCase()
-                .replaceAll("ą", "a")
-                .replaceAll("ć", "c")
-                .replaceAll("ę", "e")
-                .replaceAll("ł", "l")
-                .replaceAll("ń", "n")
-                .replaceAll("ó", "o")
-                .replaceAll("ś", "s")
-                .replaceAll("ź", "z")
-                .replaceAll("ż", "z")
+                .replaceAll("ą", "a").replaceAll("ć", "c").replaceAll("ę", "e")
+                .replaceAll("ł", "l").replaceAll("ń", "n").replaceAll("ó", "o")
+                .replaceAll("ś", "s").replaceAll("ź", "z").replaceAll("ż", "z")
                 .replaceAll("[^a-z0-9\\s-]", "")
                 .replaceAll("\\s+", "-")
                 .replaceAll("-{2,}", "-");
