@@ -1,13 +1,3 @@
-// // 🔹 Funkcja pomocnicza do pobierania zaznaczonych typów uczenia się
-// function getSelectedLearningTypes(modalElement) {
-//   const checked = modalElement.querySelectorAll(".learning-type:checked");
-//   if (!checked.length) return "0"; // 0 = wszyscy
-//   return Array.from(checked)
-//     .map(cb => cb.value)
-//     .join(","); // np. "1,2"
-// }
-
-// Obsługa quizu z wyborem odpowiedzi
 document.addEventListener("click", (e) => {
   if (e.target.classList.contains("course-quiz-option")) {
     const btn = e.target;
@@ -15,7 +5,6 @@ document.addEventListener("click", (e) => {
     const feedback = quizBlock.querySelector(".course-quiz-feedback");
     const isCorrect = btn.dataset.correct === "true";
 
-    // zablokuj inne przyciski po kliknięciu
     quizBlock.querySelectorAll(".course-quiz-option").forEach((b) => {
       b.disabled = true;
       if (b.dataset.correct === "true") b.classList.add("correct");
@@ -55,7 +44,7 @@ document.addEventListener("click", (e) => {
 
 document.addEventListener("click", (e) => {
   const btn = e.target.closest(".course-copy-btn");
-  if (!btn) return; // kliknięcie nie dotyczy przycisku kopiowania
+  if (!btn) return;
 
   const codeBlock = btn.closest(".course-code-block");
   if (!codeBlock) return;
@@ -72,7 +61,6 @@ document.addEventListener("click", (e) => {
   }, 2000);
 });
 
-// Sprawdzanie ćwiczenia praktycznego
 document.addEventListener("click", (e) => {
   if (e.target.classList.contains("check-practice-btn")) {
     const block = e.target.closest(".course-practice-block");
@@ -97,10 +85,8 @@ document.addEventListener("click", (e) => {
   }
 });
 
-// Tablica wszystkich elementów lekcji
 const lessonBlocks = [];
 
-// Funkcja do generowania HTML na podstawie obiektu
 function generateBlockHTML(block) {
    const attr = `data-learning="${block.learning || '0'}"`; // <— TU
   switch (block.type) {
@@ -124,7 +110,7 @@ function generateBlockHTML(block) {
       return `
         <div class="course-image-container my-4" ${attr}>
           <img
-            src="${block.previewSrc}"
+            src="${block.src}"
             alt="${block.alt}"
             class="course-image"
           />
@@ -266,43 +252,40 @@ function generateBlockHTML(block) {
   }
 }
 
-// Funkcja do odświeżania podglądu lekcji
 function updateLessonPreview() {
   const previewContainer = document.getElementById("lessonPreview");
   previewContainer.innerHTML = lessonBlocks.map(generateBlockHTML).join("");
 }
 
-// Obsługa dodawania nagłówka z modala
 document.getElementById("addHeaderBtn").addEventListener("click", (e) => {
   const input = document.getElementById("headerText");
   const value = input.value.trim();
-  const modal = e.target.closest(".modal"); // ⬅️ pobieramy modal, z którego kliknięto
+  const modal = e.target.closest(".modal");
 
   if (!value) {
     input.classList.add("is-invalid");
     return;
   }
 
-  // 🔹 Pobieramy zaznaczone typy uczniów
   const selected = [...modal.querySelectorAll(".learning-type:checked")]
     .map(cb => cb.value)
-    .join(",") || "0"; // jeśli nic nie zaznaczone → 0 = wszyscy
+    .join(",") || "0";
 
-  // Tworzymy obiekt typu nagłówek
+
   const newBlock = {
     id: Date.now(),
     type: "header",
     content: value,
-    learning: selected, // 🧠 zapisz atrybut
+    learning: selected,
   };
 
-  // Dodajemy do tablicy
+
   lessonBlocks.push(newBlock);
 
-  // Aktualizujemy podgląd
+
   updateLessonPreview();
 
-  // Czyścimy input i zamykamy modal
+
   input.value = "";
   input.classList.remove("is-invalid");
   modal.querySelectorAll(".learning-type:checked").forEach(cb => cb.checked = false);
@@ -314,7 +297,7 @@ document.getElementById("addHeaderBtn").addEventListener("click", (e) => {
 });
 
 
-// Obsługa dodawania tekstu
+
 document.getElementById("addTextBtn").addEventListener("click", (e) => {
   const textarea = document.getElementById("lessonText");
   const value = textarea.value.trim();
@@ -325,12 +308,12 @@ document.getElementById("addTextBtn").addEventListener("click", (e) => {
     return;
   }
 
-  // 🔹 Pobieramy zaznaczone typy uczniów
+
   const selected = [...modal.querySelectorAll(".learning-type:checked")]
     .map(cb => cb.value)
     .join(",") || "0"; // jeśli nic nie zaznaczone → 0 = wszyscy
 
-  // Tworzymy obiekt typu "text"
+
   const newBlock = {
     id: Date.now(),
     type: "text",
@@ -338,11 +321,10 @@ document.getElementById("addTextBtn").addEventListener("click", (e) => {
     learning: selected, // 🧠 dodane
   };
 
-  // Dodajemy do tablicy
+
   lessonBlocks.push(newBlock);
   updateLessonPreview();
 
-  // Czyścimy pole i zamykamy modal
   textarea.value = "";
   textarea.classList.remove("is-invalid");
   modal.querySelectorAll(".learning-type:checked").forEach(cb => cb.checked = false);
@@ -354,13 +336,12 @@ document.getElementById("addTextBtn").addEventListener("click", (e) => {
 });
 
 
-// 🔹 Tablica na pliki oczekujące na upload
 const pendingFiles = [];
 
-const PLACEHOLDER_IMAGE = "../../static/img/unnamed.png"; // zawsze ta sama w podglądzie
-const UPLOAD_BASE = "sciezka"; // <- bazowa ścieżka docelowa po zapisie
+const PLACEHOLDER_IMAGE = "../../static/img/unnamed.png";
+const UPLOAD_BASE = "sciezka";
 
-// Helper: slug nazwy lekcji
+
 function slugifyLessonName() {
   const raw = document.getElementById("lessonName")?.value || "lesson";
   return raw
@@ -370,10 +351,10 @@ function slugifyLessonName() {
     .replace(/[^\w\-]+/g, "");
 }
 
-// Globalna tablica tymczasowych plików obrazów
+
 const pendingImageFiles = [];
 
-// 🔹 Podgląd wybranego obrazu
+
 document.getElementById("imageFile").addEventListener("change", (e) => {
   const file = e.target.files[0];
   const previewContainer = document.getElementById("imagePreview");
@@ -395,7 +376,7 @@ document.getElementById("imageFile").addEventListener("change", (e) => {
   previewContainer.classList.remove("d-none");
 });
 
-// 🔹 Dodanie obrazu do lekcji (bez wysyłania)
+
 document.getElementById("addImageBtn").addEventListener("click", (e) => {
     const modal = e.target.closest(".modal");
     const fileInput = document.getElementById("imageFile");
@@ -412,38 +393,32 @@ document.getElementById("addImageBtn").addEventListener("click", (e) => {
         return;
     }
 
-    // 🔹 Generujemy unikalną nazwę (tak jak w audio)
     const uniqueName = `${crypto.randomUUID()}-${file.name}`;
 
-    // 🔹 Podmieniamy nazwę pliku w obiekcie File, żeby backend ją rozpoznał
+
     Object.defineProperty(file, "name", { value: uniqueName });
 
-    // 🔹 Tworzymy podgląd dla przeglądarki
     const previewUrl = URL.createObjectURL(file);
 
-    // 🔹 Pobieramy zaznaczone typy uczniów
     const selected = [...modal.querySelectorAll(".learning-type:checked")]
         .map(cb => cb.value)
         .join(",") || "0";
 
-    // 🔹 Tworzymy blok lekcji (będzie użyty przy generowaniu HTML)
     const newBlock = {
         id: Date.now(),
         type: "image",
-        src: previewUrl,       // lokalny podgląd
-        title: uniqueName,     // unikalna nazwa pliku (backend zamieni)
-        alt: file.name.replace(/\.[^.]+$/, ''), // opis = nazwa bez rozszerzenia
+        src: previewUrl,
+        title: uniqueName,
+        alt: file.name.replace(/\.[^.]+$/, ''),
         tempFileIndex: pendingImageFiles.length,
         learning: selected,
     };
 
-    // 🔹 Zapisz plik i blok
     pendingImageFiles.push(file);
     lessonBlocks.push(newBlock);
 
     updateLessonPreview();
 
-    // 🔹 Reset inputa i zamknięcie modala
     fileInput.value = "";
     modal.querySelectorAll(".learning-type:checked").forEach(cb => cb.checked = false);
     document.getElementById("imagePreview").classList.add("d-none");
@@ -462,7 +437,6 @@ function updateLessonPreview() {
   previewContainer.innerHTML = lessonBlocks.map(generateBlockHTML).join("");
 }
 
-// 🔹 Obsługa modala "Dodaj wideo"
 document.getElementById("addVideoBtn").addEventListener("click", (e) => {
   const modal = e.target.closest(".modal"); // pobieramy modal
   const linkInput = document.getElementById("videoLink");
@@ -476,27 +450,26 @@ document.getElementById("addVideoBtn").addEventListener("click", (e) => {
     return;
   }
 
-  // 🔹 Pobieramy zaznaczone typy uczniów
   const selected = [...modal.querySelectorAll(".learning-type:checked")]
     .map(cb => cb.value)
     .join(",") || "0"; // 0 = wszyscy
 
-  // Zamiana linku YouTube na format embeddable
+
   const embedLink = link.replace("watch?v=", "embed/");
 
-  // Tworzymy blok lekcji
+
   const newBlock = {
     id: Date.now(),
     type: "video",
     src: embedLink,
     title: title,
-    learning: selected, // 🧠 dodane
+    learning: selected,
   };
 
   lessonBlocks.push(newBlock);
   updateLessonPreview();
 
-  // Czyścimy pola i zamykamy modal
+
   linkInput.value = "";
   titleInput.value = "";
   modal.querySelectorAll(".learning-type:checked").forEach(cb => cb.checked = false);
@@ -516,7 +489,6 @@ function escapeHtml(text) {
     .replace(/'/g, "&#039;");
 }
 
-// 🔹 Obsługa modala "Dodaj pytanie / odpowiedź"
 document.getElementById("addQuestionBtn").addEventListener("click", (e) => {
   const modal = e.target.closest(".modal");
   const question = document.getElementById("quizQuestion").value.trim();
@@ -550,7 +522,6 @@ document.getElementById("addQuestionBtn").addEventListener("click", (e) => {
 });
 
 
-// 🔹 Obsługa modala "Dodaj quiz z opcjami"
 document.getElementById("addQuizBtn").addEventListener("click", (e) => {
   const modal = e.target.closest(".modal");
   const question = document.getElementById("quizMultiQuestion").value.trim();
@@ -595,7 +566,6 @@ document.getElementById("addQuizBtn").addEventListener("click", (e) => {
 });
 
 
-// 🔹 Obsługa modala "Dodaj ćwiczenie praktyczne"
 document.getElementById("addPracticeBtn").addEventListener("click", (e) => {
   const modal = e.target.closest(".modal");
   const title = document.getElementById("practiceTitle").value.trim() || "Ćwiczenie praktyczne";
@@ -635,8 +605,6 @@ document.getElementById("addPracticeBtn").addEventListener("click", (e) => {
   bsModal.hide();
 });
 
-
-// 🔹 Obsługa modala "Dodaj notatkę"
 document.getElementById("addNoteBtn").addEventListener("click", (e) => {
   const modal = e.target.closest(".modal");
   const content = document.getElementById("noteContent").value.trim();
@@ -667,7 +635,6 @@ document.getElementById("addNoteBtn").addEventListener("click", (e) => {
 });
 
 
-// 🔹 Obsługa modala "Dodaj wskazówkę"
 document.getElementById("addTipBtn").addEventListener("click", (e) => {
   const modal = e.target.closest(".modal");
   const content = document.getElementById("tipContent").value.trim();
@@ -698,7 +665,6 @@ document.getElementById("addTipBtn").addEventListener("click", (e) => {
 });
 
 
-// 🔹 Obsługa modala "Dodaj pomysł"
 document.getElementById("addIdeaBtn").addEventListener("click", (e) => {
   const modal = e.target.closest(".modal");
   const content = document.getElementById("ideaContent").value.trim();
@@ -728,7 +694,6 @@ document.getElementById("addIdeaBtn").addEventListener("click", (e) => {
   bsModal.hide();
 });
 
-// 🔹 Obsługa modala "Dodaj ciekawostkę"
 document.getElementById("addFactBtn").addEventListener("click", (e) => {
   const modal = e.target.closest(".modal");
   const content = document.getElementById("factContent").value.trim();
@@ -738,7 +703,6 @@ document.getElementById("addFactBtn").addEventListener("click", (e) => {
     return;
   }
 
-  // 🔹 Pobieramy zaznaczone typy uczniów
   const selected = [...modal.querySelectorAll(".learning-type:checked")]
     .map(cb => cb.value)
     .join(",") || "0";
@@ -747,13 +711,12 @@ document.getElementById("addFactBtn").addEventListener("click", (e) => {
     id: Date.now(),
     type: "fact",
     content,
-    learning: selected, // 🧠 dodane
+    learning: selected,
   };
 
   lessonBlocks.push(newBlock);
   updateLessonPreview();
 
-  // czyszczenie i zamknięcie modala
   document.getElementById("factContent").value = "";
   modal.querySelectorAll(".learning-type:checked").forEach(cb => cb.checked = false);
   const bsModal = bootstrap.Modal.getInstance(modal);
@@ -761,7 +724,6 @@ document.getElementById("addFactBtn").addEventListener("click", (e) => {
 });
 
 
-// 🔹 Obsługa modala "Dodaj ostrzeżenie"
 document.getElementById("addWarningBtn").addEventListener("click", (e) => {
   const modal = e.target.closest(".modal");
   const content = document.getElementById("warningContent").value.trim();
@@ -771,7 +733,6 @@ document.getElementById("addWarningBtn").addEventListener("click", (e) => {
     return;
   }
 
-  // 🔹 Pobieramy zaznaczone typy uczniów
   const selected = [...modal.querySelectorAll(".learning-type:checked")]
     .map(cb => cb.value)
     .join(",") || "0";
@@ -780,20 +741,18 @@ document.getElementById("addWarningBtn").addEventListener("click", (e) => {
     id: Date.now(),
     type: "warning",
     content,
-    learning: selected, // 🧠 dodane
+    learning: selected,
   };
 
   lessonBlocks.push(newBlock);
   updateLessonPreview();
 
-  // czyszczenie i zamknięcie modala
   document.getElementById("warningContent").value = "";
   modal.querySelectorAll(".learning-type:checked").forEach(cb => cb.checked = false);
   const bsModal = bootstrap.Modal.getInstance(modal);
   bsModal.hide();
 });
 
-// 🔹 Obsługa modala "Dodaj blok kodu"
 document.getElementById("addCodeBtn").addEventListener("click", (e) => {
   const modal = e.target.closest(".modal");
   const title = document.getElementById("codeTitle").value.trim() || "Przykład kodu";
@@ -805,7 +764,6 @@ document.getElementById("addCodeBtn").addEventListener("click", (e) => {
     return;
   }
 
-  // 🔹 Pobieramy zaznaczone typy uczniów
   const selected = [...modal.querySelectorAll(".learning-type:checked")]
     .map(cb => cb.value)
     .join(",") || "0";
@@ -816,13 +774,13 @@ document.getElementById("addCodeBtn").addEventListener("click", (e) => {
     title,
     language,
     code: content,
-    learning: selected, // 🧠 dodane
+    learning: selected,
   };
 
   lessonBlocks.push(newBlock);
   updateLessonPreview();
 
-  // czyszczenie pól i zamknięcie modala
+
   document.getElementById("codeTitle").value = "";
   document.getElementById("codeLanguage").selectedIndex = 0;
   document.getElementById("codeContent").value = "";
@@ -836,10 +794,9 @@ document.getElementById("addCodeBtn").addEventListener("click", (e) => {
 
 
 
-// globalna tablica tymczasowych plików audio
 const pendingAudioFiles = [];
 
-// 🔹 Dodawanie pliku audio (z typami uczniów)
+
 document.getElementById("addAudioBtn").addEventListener("click", (e) => {
     const modal = e.target.closest(".modal");
     const fileInput = document.getElementById("audioFile");
@@ -856,38 +813,38 @@ document.getElementById("addAudioBtn").addEventListener("click", (e) => {
         return;
     }
 
-    // 🔹 Wybór typów uczniów
+
     const selected = [...modal.querySelectorAll(".learning-type:checked")]
         .map(cb => cb.value)
         .join(",") || "0";
 
-    // 🔹 Generujemy unikalną nazwę pliku (frontend + backend powiązane)
+
     const uniqueName = `${crypto.randomUUID()}-${file.name}`;
 
-    // 🔹 Tworzymy podgląd audio (działa tylko w przeglądarce)
+
     const previewUrl = URL.createObjectURL(file);
 
-    // 🔹 Ustawiamy właściwość originalName, by backend mógł odczytać nazwę
+
     Object.defineProperty(file, "name", { value: uniqueName });
 
-    // 🔹 Dodajemy do tablicy plików (musi być przed wyczyszczeniem inputa)
+
     pendingAudioFiles.push(file);
 
-    // 🔹 Tworzymy obiekt bloku lekcji
+
     const newBlock = {
         id: Date.now(),
         type: "audio",
-        src: previewUrl, // tylko do podglądu
-        title: uniqueName, // nazwa zgodna z tą, którą backend zapisze
+        src: previewUrl,
+        title: uniqueName,
         tempFileIndex: pendingAudioFiles.length - 1,
         learning: selected,
     };
 
-    // 🔹 Dodaj blok do listy i odśwież podgląd
+
     lessonBlocks.push(newBlock);
     updateLessonPreview();
 
-    // ✅ Czyszczenie inputa i zamknięcie modala
+
     fileInput.value = "";
     document.getElementById("audioPreview").classList.add("d-none");
     modal.querySelectorAll(".learning-type:checked").forEach(cb => cb.checked = false);
@@ -900,21 +857,19 @@ document.getElementById("addAudioBtn").addEventListener("click", (e) => {
 
 
 
-// 🔹 Funkcja generująca kompletny HTML lekcji
+
 function generateLessonHTML() {
-  // połączenie wszystkich bloków w jeden string HTML
   const html = lessonBlocks.map(generateBlockHTML).join("\n");
 
-  // dla testu: wyświetlenie w konsoli i modalu / alercie
   console.log("📦 Wygenerowany HTML lekcji:\n", html);
   return html;
 }
 
-// 🔹 Testowy przycisk do sprawdzenia kodu HTML (np. na dole strony)
+
 document.getElementById("previewLessonHTMLBtn")?.addEventListener("click", () => {
   const html = generateLessonHTML();
 
-  // pokaż w modalu lub prostym oknie
+
   const newWindow = window.open("", "_blank");
   newWindow.document.write(`
     <html>
@@ -940,25 +895,42 @@ document.getElementById("saveLessonBtn").addEventListener("click", saveLesson);
 
 async function saveLesson() {
     const courseId = document.getElementById("courseId").value;
+    const courseSlug = document.getElementById("courseName").value;
     const lessonTitle = document.getElementById("lessonName").value;
     let html = generateLessonHTML();
 
-// 🔹 Podmieniamy blob:http... na faktyczne nazwy plików (uniqueName)
-    pendingAudioFiles.forEach(file => {
-        if (file.name) {
-            // znajdź pierwsze wystąpienie blob:... i podmień na nazwę pliku
-            html = html.replace(/blob:[^"]+/i, file.name);
-        }
-    });
+    lessonBlocks
+        .filter(b => b.type === "image")
+        .forEach(b => {
+            const f = pendingImageFiles[b.tempFileIndex];
+            if (f && b.src && b.src.startsWith("blob:")) {
+                html = html.replaceAll(b.src, f.name);
+            }
+        });
+
+    lessonBlocks
+        .filter(b => b.type === "audio")
+        .forEach(b => {
+            const f = pendingAudioFiles[b.tempFileIndex];
+            if (f && b.src && b.src.startsWith("blob:")) {
+                html = html.replaceAll(b.src, f.name);
+            }
+        });
 
     const formData = new FormData();
     formData.append("courseId", courseId);
     formData.append("title", lessonTitle);
     formData.append("contentHtml", html);
 
-    // dodajemy pliki z pendingImageFiles i pendingAudioFiles
-    pendingImageFiles.forEach(file => formData.append("images", file));
-    pendingAudioFiles.forEach(file => formData.append("audio", file));
+    pendingImageFiles.forEach((file) => {
+        formData.append("images", file);
+        formData.append("imageNames", file.name);
+    });
+
+    pendingAudioFiles.forEach((file) => {
+        formData.append("audio", file);
+        formData.append("audioNames", file.name);
+    });
 
     try {
         const res = await fetch("/api/lessons/save", {
@@ -967,9 +939,11 @@ async function saveLesson() {
         });
 
         if (!res.ok) throw new Error("Błąd podczas zapisu lekcji");
-        alert("✅ Lekcja zapisana pomyślnie!");
+        sessionStorage.setItem("successMessage", "Lekcja została utworzona pomyślnie!");
+        window.location.href = `/kurs/${courseSlug}`;
     } catch (err) {
         console.error(err);
-        alert("❌ Wystąpił błąd przy zapisie lekcji");
     }
 }
+
+
