@@ -939,6 +939,7 @@ async function saveLesson() {
         });
 
         if (!res.ok) throw new Error("Błąd podczas zapisu lekcji");
+        sessionStorage.setItem("successMessage", "Lekcja została utworzona pomyślnie!");
         window.location.href = `/kurs/${courseSlug}`;
     } catch (err) {
         console.error(err);
