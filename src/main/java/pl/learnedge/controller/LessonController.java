@@ -49,9 +49,6 @@ public class LessonController {
             @RequestParam(value = "audio", required = false) List<MultipartFile> audio,
             @RequestParam(value = "audioNames", required = false) List<String> audioNames
     ) {
-        System.err.println("📘 Zapis lekcji: " + title);
-        System.err.println("🖼️ Ilość obrazków: " + (images != null ? images.size() : 0));
-        System.err.println("🎵 Ilość audio: " + (audio != null ? audio.size() : 0));
 
         lessonService.saveLesson(courseId, title, contentHtml, images, imageNames, audio, audioNames);
         return ResponseEntity.ok("Lesson saved successfully");

@@ -46,7 +46,8 @@ public class LessonService {
         Lesson lesson = new Lesson();
         lesson.setTitle(title);
         lesson.setCourse(course);
-        lesson.setLessonOrder(0);
+        int nextOrder = getLastLessonOrder(courseId) + 1;
+        lesson.setLessonOrder(nextOrder);
         lesson.setSlug(generateSlug(title));
         lesson.setContent("");
         lesson = lessonRepository.save(lesson);
@@ -129,4 +130,11 @@ public class LessonService {
                 .replaceAll("\\s+", "-")
                 .replaceAll("-{2,}", "-");
     }
+
+    private int getLastLessonOrder(Long courseId){
+        return lessonRepository.findTopByCourseIdOrderByLessonOrderDesc(courseId)
+                .map(Lesson::getLessonOrder)
+                .orElse(0);
+    }
 }
+

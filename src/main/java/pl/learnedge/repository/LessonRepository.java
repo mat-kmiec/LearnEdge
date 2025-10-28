@@ -10,4 +10,6 @@ import java.util.Optional;
 public interface LessonRepository extends JpaRepository<Lesson, Long> {
     List<Lesson> findAllByCourseId(Long courseId);
     Optional<Lesson> findBySlug(String slug);
+    Optional<Lesson> findTopByCourseIdOrderByLessonOrderDesc(Long courseId);
+
 }
